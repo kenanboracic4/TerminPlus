@@ -2,6 +2,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const sequelize = require('./config/db');
+require('dotenv').config();
+const cors = require('cors');
+app.use(cors()); // Dozvoljava frontendu da komunicira sa backendom
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -16,5 +20,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+
+sequelize.sync({ alter: true }) // 'alter' ažurira tabele ako dodaš nova polja
+    .then(() => console.log('Baza podataka uspješno povezana i sinhronizovana!'))
+    .catch(err => console.error('Greška pri povezivanju na bazu:', err));
 
 module.exports = app;
