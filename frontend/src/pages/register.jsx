@@ -1,26 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
+
 import '../assets/css/Register.css';
+import Spinner from 'react-bootstrap/Spinner';
 
 const Register = () => {
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
-    password: '',
-    location: ''
+    password: ''
   });
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    try {
+      setLoading(true);
+      setMessage(''); 
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Podaci spremni za backend:', formData);
-    // Ovdje kasnije dodaješ logiku za API poziv
+      
+      const response = await fetch('http://localhost:3000/user/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setMessage('Uspešna registracija! Sada se možete prijaviti.');
+        setTimeout(() => {
+          
+        }, 2000); 
+      } else {
+        const errorData = await response.json();
+        setMessage(errorData.message || 'Greška prilikom registracije.');
+      }
+    } catch (error) {
+      setMessage('Greška prilikom povezivanja sa serverom.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -33,27 +53,27 @@ const Register = () => {
 
         <form onSubmit={handleSubmit} className="register-form">
           <div className="input-group">
-            <label htmlFor="name">Ime i prezime</label>
+            <label htmlFor="name">Ime</label>
             <input
               type="text"
               id="name"
               name="name"
-              placeholder="Unesi svoje ime"
               value={formData.name}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Unesi svoje ime"
               required
             />
           </div>
 
           <div className="input-group">
-            <label htmlFor="email">Email adresa</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               id="email"
               name="email"
-              placeholder="tvoj@email.com"
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="tvoj@email.com"
               required
             />
           </div>
@@ -66,34 +86,17 @@ const Register = () => {
               name="password"
               placeholder="••••••••"
               value={formData.password}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
               required
             />
           </div>
 
-          <div className="input-group">
-            <label htmlFor="location">Lokacija</label>
-            <div className="select-wrapper">
-              <select
-                id="location"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                required
-              >
-                <option value="" disabled>Odaberi svoj grad</option>
-                <option value="sarajevo">Sarajevo</option>
-                <option value="mostar">Mostar</option>
-                <option value="banja_luka">Banja Luka</option>
-                <option value="tuzla">Tuzla</option>
-                <option value="zenica">Zenica</option>
-              </select>
-            </div>
-          </div>
-
-          <button type="submit" className="register-btn">
-            Registruj se
+        
+          
+          <button type="submit" className="register-btn" disabled={loading}>
+            {loading ? <Spinner animation="border" size="sm" /> : 'Registruj se'}
           </button>
+            {message && <p className="register-message">{message}</p>}
         </form>
 
         <div className="register-footer">

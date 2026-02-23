@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './App.css';
 import IndexPage from './pages/index';
@@ -9,7 +10,7 @@ function App() {
 
   return (
     <>
-      <Login />
+      <Register />
     
     </>
   )

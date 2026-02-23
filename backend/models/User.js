@@ -22,13 +22,13 @@ const User = sequelize.define('User', {
   },
   profileImage: {
     type: DataTypes.STRING,
-    defaultValue: 'default-profile.png' // Putanja do slike na serveru ili URL
+    defaultValue: 'default-profile.png' 
   },
   avgReview: {
     type: DataTypes.FLOAT,
     defaultValue: 0.0
   },
-  // Koordinate za mapu i precizan pronalazak
+  
   latitude: {
     type: DataTypes.DECIMAL(10, 8),
     allowNull: true
