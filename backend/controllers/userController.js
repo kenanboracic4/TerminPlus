@@ -12,5 +12,18 @@ module.exports = {
             res.status(500).json({message: error.message});
 
         }
+    },
+    async handleLoginUser(req,res){
+        const {email,password} = req.body;
+        try {
+            let user = await userService.loginUser(email,password);
+            res.status(200).json({
+                message: 'Uspješna prijava!',
+                token : user.token
+            })
+        }catch(error){
+            console.log(error);
+            res.status(401).json({message:error.message || 'Pogrešni podaci.'});
+        }
     }
 }

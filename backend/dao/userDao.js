@@ -8,5 +8,10 @@ module.exports = {
             email,
             password
         })
+    },
+    async getUserByEmail(email){
+        return await User.findOne({
+            where: {email}
+        })
     }
 }
