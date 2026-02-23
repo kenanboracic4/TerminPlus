@@ -1,0 +1,156 @@
+/* Importujemo moderan font (opcionalno, ali preporučeno) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Kontejner sa potamnjenom pozadinom */
+.register-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Ovdje potamnjujemo sliku sa rgba crnom bojom (70% do 85% opacity) */
+  background: linear-gradient(
+      rgba(5, 15, 30, 0.787), 
+      rgba(5, 15, 30, 0.85)
+    ), 
+    url('../sportpattern.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  padding: 20px;
+}
+
+/* Glassmorphism kartica */
+.register-glass-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(0, 0, 0, 0.08); /* Prozirna bijela */
+  backdrop-filter: blur(16px) saturate(130%); /* Efekt zamućenja stakla */
+  -webkit-backdrop-filter: blur(16px);
+  border: 2px solid rgba(149, 255, 0, 0.44);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.66);
+  color: #fff;
+}
+
+.register-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.register-header h2 {
+  margin: 0 0 10px 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.register-header p {
+  margin: 0;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+  margin-left: 5px;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 15px;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+/* Promjena boje kad korisnik klikne na input */
+.input-group input:focus,
+.input-group select:focus {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: #b5f2009c;
+  box-shadow: 0 0 0 1px rgba(126, 226, 11, 0.2);
+}
+
+/* Stilizacija za placeholder */
+.input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* Fix za select dropdown opcije da se vide na bijeloj pozadini */
+.input-group select option {
+  background-color: #1e293b;
+  color: #fff;
+  
+}
+
+.register-btn {
+  margin-top: 10px;
+  padding: 15px;
+  background: linear-gradient(135deg, #c0ff03, #7d8f08);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  font-family: inherit;
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+.register-btn:active {
+  transform: translateY(0);
+}
+
+.register-footer {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.register-footer a {
+  color: #60a5fa;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.register-footer a:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
