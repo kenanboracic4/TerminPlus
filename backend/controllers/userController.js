@@ -19,7 +19,8 @@ module.exports = {
             let user = await userService.loginUser(email,password);
             res.status(200).json({
                 message: 'Uspješna prijava!',
-                token : user.token
+                token : user.token,
+                user: user.user
             })
         }catch(error){
             console.log(error);

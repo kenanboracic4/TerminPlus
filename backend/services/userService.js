@@ -32,7 +32,16 @@ module.exports = {
         process.env.JWT_SECRET,
         {expiresIn: '1h'}
         );
-        return token;
+
+        const userData = {
+            id: user.id,
+            name: user.name,
+            email:user.email,
+            profileImage: user.profileImage,
+            avgReview: user.avgReview
+
+        }
+        return {token, userData};
     }
 
 }

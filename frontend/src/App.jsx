@@ -1,5 +1,7 @@
 import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { AuthProvider } from './context/AuthContext';
+
 
 import './App.css';
 import IndexPage from './pages/index';
@@ -10,8 +12,10 @@ function App() {
 
   return (
     <>
+    <AuthProvider>
       <Login />
     
+    </AuthProvider>
     </>
   )
 }

@@ -111,9 +111,9 @@
 .step-connector {
   flex-grow: 1;
   height: 3px;
-  background-color: #b2adffaa;
+  background-color: #8fea05f9;
   align-self: center;
-  margin: 0 1rem;
+  margin: 0 0.5rem;
   position: relative;
   z-index: 1;
 }

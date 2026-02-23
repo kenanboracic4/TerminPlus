@@ -1,0 +1,127 @@
+.hero-header {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 5%;
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
+
+/* LOGO STYLES */
+.logo-brand-container {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px;
+  transform: skewX(-12deg); 
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.logo-text-massive {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -2px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(180deg, #ffffff 0%, #8a95a5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(3px 3px 0px rgba(0, 0, 0, 0.9));
+}
+
+.logo-plus-neon {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3.5rem;
+  font-weight: 900;
+  line-height: 0;
+  margin-left: 4px;
+  color: var(--color-accent);
+  transform: skewX(12deg) translateY(-2px); 
+  text-shadow: 0 0 15px rgba(204, 255, 0, 0.6), 3px 3px 0px rgba(0, 0, 0, 0.9);
+}
+
+.logo-brand-container:hover {
+  transform: skewX(-12deg) scale(1.02);
+}
+
+/* NAV LINKS */
+.desktop-nav ul {
+  display: flex;
+  list-style: none;
+  gap: 2.5rem;
+}
+
+.desktop-nav a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.2s ease;
+  opacity: 0.8;
+}
+
+.desktop-nav a:hover {
+  color: var(--color-text-main);
+  opacity: 1;
+}
+
+/* ACTIONS & BUTTONS */
+.header-action {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-link-login {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.btn-join {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 10px 24px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-join:hover {
+  background: var(--color-accent);
+  border-color: #000;
+  color: #000;
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--color-text-main);
+  transition: all 0.3s ease;
+}
+
+.profile-btn:hover {
+  background: var(--color-accent);
+  color: #000;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 1024px) {
+  .desktop-nav { display: none; }
+}
