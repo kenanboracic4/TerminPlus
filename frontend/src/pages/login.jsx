@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import '../assets/css/Register.css';
 import Spinner from 'react-bootstrap/Spinner';
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +10,7 @@ const Login = () => {
     password: '',
   });
 
+  const { login } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -21,15 +24,14 @@ const Login = () => {
         body: JSON.stringify(formData)
       });
 
-
+      const data = await response.json();
+      console.log(data);
       if (response.ok) {
-        const data = await response.json();
-        setMessage('Uspešna prijava!');
-        localStorage.setItem('token',data.token);
+       
+        login(data.token, data.user);
+        setMessage('Uspješno ste se prijavili!');
       } else {
-        
-        const errorData = await response.json();
-        setMessage(errorData.message || 'Pogrešni podaci.');
+        setMessage(data.message || 'Pogrešni podaci.');
       }
     } catch (error) {
       setMessage('Greška prilikom prijave.');
