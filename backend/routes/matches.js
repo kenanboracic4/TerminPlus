@@ -1,11 +1,14 @@
 var express = require('express');
 var router = express.Router();
-
+const { verifyToken } = require('../middlware/auth');
 const matchController = require('../controllers/matchController');
+
+
 router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
+  res.send('Ovdje će biti lista termina');
 });
 
-router.post('/new', matchController.handleAddMatch);
+
+router.post('/new', verifyToken, matchController.handleAddMatch);
 
 module.exports = router;
