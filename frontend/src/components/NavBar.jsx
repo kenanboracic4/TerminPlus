@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import '../assets/css/Navbar.css';
 import { AuthContext } from '../context/AuthContext';
-import { useContext } from 'react';
+import { Link } from 'react-router-dom';
 
 const Navbar = () => {
- const { isLoggedIn, logout, userData} = useContext(AuthContext);
+  const { isLoggedIn, logout, userData } = useContext(AuthContext);
+
   return (
     <header className="hero-header">
       <div className="logo-brand-container">
@@ -15,29 +16,46 @@ const Navbar = () => {
 
       <nav className="desktop-nav">
         <ul>
-          <li><a href="#pocetna">Početna</a></li>
+          <li><Link to="/">Početna</Link></li>
           <li><a href="#kako-funkcionise">Kako funkcioniše</a></li>
-          <li><a href="#pronadi">Pronađi termin</a></li>
+          <li><Link to="/matches">Pronađi termin</Link></li>
         </ul>
       </nav>
 
       <div className="header-action">
         {!isLoggedIn ? (
           <>
-            <a href="#prijava" className="nav-link-login">Prijava</a>
-            <button className="btn-join">Registracija</button>
+            <Link to="/login" className="nav-link-login">Prijava</Link>
+            <Link to="/register" className="btn-join">Registracija</Link>
           </>
         ) : (
-          <>
-            <button className="btn-join hidden-mobile">Kreiraj igru</button>
-            <a href="#profil" className="profile-btn" aria-label="Profil">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                <circle cx="12" cy="7" r="4"></circle>
+          <div className="user-profile-container">
+            <div className="user-info">
+              <div className="user-avatar">
+                {/* SVG ikonica za korisnika */}
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <span className="user-name">
+                {userData?.name || "Korisnik"}
+              </span>
+            </div>
+            
+            {/* Uspravna tanka linija */}
+            <div className="nav-divider"></div>
+
+            {/* Dugme za odjavu sa ikonicom */}
+            <button className="btn-logout" onClick={logout}>
+              <span>Odjava</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
               </svg>
-            </a>
-            <button className="btn-join hidden-mobile" onClick={logout}>Odjava</button>
-          </>
+            </button>
+          </div>
         )}
       </div>
     </header>

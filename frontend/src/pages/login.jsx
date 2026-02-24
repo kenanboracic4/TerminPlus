@@ -3,8 +3,10 @@ import '../assets/css/Register.css';
 import Spinner from 'react-bootstrap/Spinner';
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -31,6 +33,9 @@ const Login = () => {
         console.log("data user", data.user);
         login(data.token, data.user);
         setMessage('Uspješno ste se prijavili!');
+        setTimeout(()=>{
+          navigate('/matches');
+        },1000);
       } else {
         setMessage(data.message || 'Pogrešni podaci.');
       }
@@ -90,7 +95,7 @@ const Login = () => {
         </form>
 
         <div className="register-footer">
-          <p>Nemas  nalog? <a href="/register">Registruj se</a></p>
+          <p>Nemas  nalog? <Link to="/register">Registruj se</Link></p>
         </div>
       </div>
     </div>
