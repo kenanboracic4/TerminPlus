@@ -44,7 +44,7 @@ const Match = sequelize.define('Match', {
      },
      address: {
     type: DataTypes.STRING, 
-    allowNull: false // npr. "Zetra, Sarajevo" ili "SC Kantarevac, Mostar"
+    allowNull: false 
   },
   latitude: {
     type: DataTypes.DECIMAL(10, 8),

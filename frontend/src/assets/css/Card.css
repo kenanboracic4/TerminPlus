@@ -1,0 +1,289 @@
+:root {
+  --card-bg: #141414;        /* Duboka tamna pozadina */
+  --card-bg-hover: #1c1c1c;  /* Malo svetlija na hover */
+  --accent-yellow: #facc15;  /* Neon/Vibrant žuta */
+  --accent-yellow-dim: rgba(250, 204, 21, 0.15); /* Za pozadine bedževa */
+  --text-main: #f8fafc;      /* Skoro bela za naslove */
+  --text-muted: #94a3b8;     /* Sivo-plava za sporedni tekst */
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(250, 204, 21, 0.3); /* Žuti border na hover */
+  --radius-main: 16px;
+  --transition-speed: 0.3s;
+}
+
+/* Osnovni kontejner kartice */
+.term-card {
+  background: var(--card-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-main);
+  padding: 0; /* Padding je prebačen u unutrašnje elemente zbog expanda */
+  width: 100%;
+  color: var(--text-main);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  transition: all var(--transition-speed) ease;
+  overflow: hidden; /* Da detalji ne ispadaju iz ćoškova */
+}
+
+.term-card:hover {
+  background: var(--card-bg-hover);
+  border-color: var(--glass-border-hover);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(250, 204, 21, 0.08); /* Blagi žuti sjaj */
+}
+
+/* =========================================
+   GLAVNI DEO (Desktop: Horizontalno)
+   ========================================= */
+.card-main {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px;
+  gap: 24px;
+}
+
+/* Pojedinačne kolone */
+.card-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* 1. Naslov i bedž */
+.title-col {
+  flex: 1.5;
+  min-width: 200px;
+}
+
+.title-col h2 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  color: var(--text-main);
+}
+
+.player-badge {
+  background: var(--accent-yellow-dim);
+  color: var(--accent-yellow);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 13px;
+  width: fit-content;
+  border: 1px solid rgba(250, 204, 21, 0.2);
+}
+
+/* 2. Vreme i datum */
+.time-col {
+  flex: 1;
+  gap: 8px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.icon {
+  color: var(--text-muted);
+}
+
+/* 3. Lokacija */
+.location-col {
+  flex: 1.5;
+  gap: 6px;
+}
+
+.loc-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.loc-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-main);
+}
+
+.icon-green { 
+  color: var(--accent-yellow); /* Zadržali smo tvoju klasu 'icon-green', ali promenili u žuto */
+}
+
+.distance-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-left: 2px;
+}
+
+/* 4. Akcije (Dugmad) */
+.actions-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end; /* Poravnanje na desno za desktop */
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 13px;
+  padding: 12px 16px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 160px; /* Da dugmad ne budu preširoka na desktopu */
+}
+
+.btn-details {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--glass-border);
+}
+
+.btn-details:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-join {
+  background: var(--accent-yellow);
+  color: #000;
+  box-shadow: 0 4px 15px rgba(250, 204, 21, 0.15);
+}
+
+.btn-join:hover {
+  background: #eab308; /* Malo tamnija žuta na hover */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(250, 204, 21, 0.3);
+}
+
+
+/* =========================================
+   DETALJI SEKCIJA (Expandable)
+   ========================================= */
+.details-section {
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid var(--glass-border);
+  padding: 24px;
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dve jednake kolone na desktopu */
+  gap: 30px;
+}
+
+.details-block h4 {
+  color: var(--text-main);
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.details-block p {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.player-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.player-list li {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: var(--text-main);
+  border-left: 3px solid transparent;
+}
+
+.player-list li:first-child {
+  border-left-color: var(--accent-yellow); /* Isticanje organizatora */
+}
+
+.player-list .empty-slot {
+  color: var(--text-muted);
+  border: 1px dashed var(--glass-border);
+  background: transparent;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.player-list .empty-slot:hover {
+  border-color: var(--accent-yellow);
+  color: var(--accent-yellow);
+}
+
+
+/* =========================================
+   RESPONSIVE DESIGN (Mobilni telefoni)
+   ========================================= */
+@media (max-width: 768px) {
+  .card-main {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .card-col {
+    width: 100%;
+  }
+
+  .actions-col {
+    flex-direction: row; /* Dugmad idu jedno pored drugog na mobu */
+    align-items: center;
+    max-width: 100%;
+  }
+
+  button {
+    max-width: 100%; /* Dugmad zauzimaju sav dostupan prostor u redu */
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr; /* Sve u jednu kolonu na mobu */
+    gap: 20px;
+  }
+}

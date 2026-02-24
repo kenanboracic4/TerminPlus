@@ -24,9 +24,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user');
+var matchesRouter = require('./routes/matches');
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
+app.use('/matches', matchesRouter);
 
 
 sequelize.sync({ alter: true, logging: false}) 

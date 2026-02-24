@@ -1,0 +1,11 @@
+const matchDao = require('../dao/matchDao');
+
+module.exports = {
+    async addMatch(title, sportId, date, maxPlayers, pricePerPerson, latitude, longitude, address, description, userId){
+        if(!title || !sportId || !date || !maxPlayers || !pricePerPerson || !latitude || !longitude || !address || !description){
+            throw new Error('Sva polja su obavezna');
+        }
+        return await matchDao.createMatch(title, sportId, date, maxPlayers, pricePerPerson, latitude, longitude, address, description, userId);
+
+    }
+}

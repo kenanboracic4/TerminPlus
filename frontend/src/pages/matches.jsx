@@ -1,0 +1,263 @@
+import React, { useState, useEffect } from 'react';
+import {
+    Search, Plus, MapPin, AlignLeft, Calendar,
+    Users, DollarSign, Map
+} from 'lucide-react';
+
+import { AuthContext } from '../context/AuthContext';
+import Spinner from 'react-bootstrap/Spinner';
+import '../assets/css/Matches.css';
+import Navbar from '../components/NavBar';
+import Card from '../components/Card';
+
+const Matches = () => {
+    const [formData, setFormData] = useState({
+        title: '',
+        sportId: '', 
+        date: '',
+        maxPlayers: '',
+        pricePerPerson: '',
+        latitude: '',
+        longitude: '',
+        address: '',
+        description: ''
+    });
+
+    const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [distance, setDistance] = useState(20); 
+
+    const [results, setResults] = useState([]); 
+    const [query, setQuery] = useState("");      
+
+    
+    useEffect(() => {
+        if (query.length < 3) {
+            setResults([]);
+            return;
+        }
+
+        const timer = setTimeout(async () => {
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${query}&addressdetails=1&limit=5&countrycodes=ba,rs,hr,me,si,mk,al`
+                );
+                const data = await response.json();
+                setResults(data);
+            } catch (error) {
+                console.error("Greška pri pretrazi:", error);
+                setResults([]);
+            }
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [query]);
+
+    const selectLocation = (item) => {
+        setQuery(item.display_name);
+        setFormData({
+            ...formData,
+            address: item.display_name,
+            latitude: item.lat,
+            longitude: item.lon
+        });
+        setResults([]);
+        console.log("Koordinate sačuvane:", item.lat, item.lon);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try{
+            setLoading(true);
+            const token = localStorage.getItem('token');
+            console.log("token:", token);
+            const response = await fetch ('http://localhost:3000/matches/new',{
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    title: formData.title,
+                    sportId: formData.sportId,
+                    date: formData.date,
+                    maxPlayers: formData.maxPlayers,
+                    pricePerPerson: formData.pricePerPerson,
+                    latitude: formData.latitude,
+                    longitude: formData.longitude,
+                    address: formData.address,
+                    description: formData.description
+                })
+            });
+
+            if(response.ok){
+                setMessage('Termin uspješno kreiran!');
+            }else{
+                const errorData = await response.json();
+                setMessage(errorData.message || 'Greška prilikom kreiranja termina.');
+            }
+        }catch(error){
+            console.error(error);
+            setMessage('Greška prilikom slanja podataka.');
+        }finally{
+            setLoading(false);
+        }
+    };
+
+    return (
+        <>
+            <Navbar isLoggedIn={true} />
+
+            <div className="match-manager-container">
+              
+                <div className="top-bar-glass">
+                    <div className="filter-group">
+                        <select name="sportFilter" className="custom-select">
+                            <option value="football">Fudbal</option>
+                            <option value="basketball">Košarka</option>
+                            <option value="tennis">Tenis</option>
+                        </select>
+
+                        <div className="slider-container">
+                            <label>Udaljenost: <span>{distance} km</span></label>
+                            <input
+                                type="range"
+                                min="1"
+                                max="50"
+                                value={distance}
+                                onChange={(e) => setDistance(e.target.value)}
+                                className="custom-slider"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="action-group">
+                        <button className="btn-search">
+                            <Search size={16} /> PRETRAŽI
+                        </button>
+                        <button onClick={() => setIsOpen(!isOpen)} className="btn-publish">
+                            <Plus size={16} /> {isOpen ? "ZATVORI" : "OBJAVI"}
+                        </button>
+                    </div>
+                </div>
+
+                {isOpen && (
+                    <div className="form-glass-card">
+                        <div className="form-header">
+                            <h3>Kreiraj novi termin</h3>
+                            <p>Popuni detalje za tvoj novi meč</p>
+                        </div>
+
+                        <form  className="match-form" onSubmit={handleSubmit}>
+                           
+                            <div className="input-group full-width">
+                                <label>Naslov termina</label>
+                                <input type="text"
+                                    name="title"
+                                    placeholder="npr. Večernji termin 5 na 5"
+                                    value={formData.title}
+                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            
+                            <div className="input-group">
+                                <label>Sport</label>
+                                <select 
+                                    name="sportId" 
+                                    value={formData.sportId} 
+                                    onChange={(e) => setFormData({ ...formData, sportId: e.target.value })}
+                                >
+                                    <option value="1">Fudbal</option>
+                                    <option value="2">Košarka</option>
+                                    <option value="3">Tenis</option>
+                                </select>
+                            </div>
+                            <div className="input-group">
+                                <label><Calendar size={14} /> Datum i vreme</label>
+                                <input type="datetime-local" name="date"
+                                    value={formData.date}
+                                    onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                                    required
+                                />
+                            </div>
+
+                            
+                            <div className="input-group">
+                                <label><Users size={14} /> Max broj igrača</label>
+                                <input type="number" 
+                                    name="maxPlayers"
+                                    min="2"
+                                    max="22"
+                                    placeholder="npr. 10"
+                                    value={formData.maxPlayers}
+                                    onChange={(e) => setFormData({ ...formData, maxPlayers: e.target.value })}
+                                    required
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label><DollarSign size={14} /> Cena po osobi (KM)</label>
+                                <input type="number" 
+                                    step="0.5"
+                                    name="pricePerPerson" 
+                                    placeholder="npr. 5.50"
+                                    value={formData.pricePerPerson}
+                                    onChange={(e) => setFormData({ ...formData, pricePerPerson: e.target.value })}
+                                />
+                            </div>
+
+                           
+                            <div className="input-group full-width">
+                                <label><MapPin size={14} /> Adresa lokacije</label>
+                                <input type="text" 
+                                    name="address" 
+                                    placeholder='Pretraži lokaciju (npr. Zetra, Sarajevo)'
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                    autoComplete="off"
+                                    required
+                                />
+                                {results.length > 0 && (
+                                    <ul className="location-results">
+                                        {results.map((item, index) => (
+                                            <li key={index} onClick={() => selectLocation(item)}>
+                                                <MapPin size={12} /> {item.display_name}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                              
+                                <input type="hidden" name="latitude" value={formData.latitude} />
+                                <input type="hidden" name="longitude" value={formData.longitude} />
+                            </div>
+
+                            
+                            <div className="input-group full-width">
+                                <label><AlignLeft size={14} /> Dodatni opis</label>
+                                <textarea
+                                    name="description" 
+                                    rows="3" 
+                                    placeholder="Pravila, informacije o opremi..."
+                                    value={formData.description}
+                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                ></textarea>
+                            </div>
+
+                            <div className="form-actions full-width">
+                                <button type="submit" className="btn-submit">Spremi termin</button>
+                            </div>
+                        </form>
+                    </div>
+                )}
+
+                <div className="matches-list">
+                    <Card />
+                </div>
+            </div>
+        </>
+    );
+}
+
+export default Matches;
