@@ -25,9 +25,10 @@ const Login = () => {
       });
 
       const data = await response.json();
-      console.log(data);
+      console.log("login: ", data);
       if (response.ok) {
-       
+        console.log("data token", data.token);
+        console.log("data user", data.user);
         login(data.token, data.user);
         setMessage('Uspješno ste se prijavili!');
       } else {

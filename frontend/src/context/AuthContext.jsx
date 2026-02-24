@@ -22,7 +22,6 @@ export const AuthProvider = ({ children }) => {
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
-                        
                     },
                 
                 });
@@ -48,11 +47,11 @@ export const AuthProvider = ({ children }) => {
     },[]);
 
     const login = (token, userData) => {
-       
+       console.log("funkcija",userData);
         localStorage.setItem('token', token);
         setUserData(userData);
         setIsLoggedIn(true);
-         console.log(userData);
+        
     };
 
     const logout = () => {

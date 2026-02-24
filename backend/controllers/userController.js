@@ -20,11 +20,21 @@ module.exports = {
             res.status(200).json({
                 message: 'Uspješna prijava!',
                 token : user.token,
-                user: user.user
+                user
             })
         }catch(error){
             console.log(error);
             res.status(401).json({message:error.message || 'Pogrešni podaci.'});
         }
+    },
+    async handleAuthUser(req,res){
+        console.log(req.user);
+        if(!req.user){
+            res.status(401).json({message: 'Korisnik nije pronađen!'});
+            return;
+        }
+
+
+        res.status(200).json(req.user);
     }
 }
