@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
     Search, Plus, MapPin, AlignLeft, Calendar,
     Users, DollarSign, Map
@@ -11,6 +11,7 @@ import Navbar from '../components/NavBar';
 import Card from '../components/Card';
 
 const Matches = () => {
+    const { token } = useContext(AuthContext);
     const [formData, setFormData] = useState({
         title: '',
         sportId: '', 
@@ -68,11 +69,13 @@ const Matches = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!token) {
+        setMessage("Greška: Niste ulogovani!");
+        return;
+    }
         try{
             setLoading(true);
-            const token = localStorage.getItem('token');
-            console.log("token:", token);
-            const response = await fetch ('http://localhost:3000/matches/new',{
+            const response = await fetch ('http://localhost:3000/matches/new', {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json',

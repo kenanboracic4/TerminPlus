@@ -5,7 +5,7 @@ import Footer from '../components/Footer';
 const Index = () => {
     return (
         <>
-           <HeroSection />
+        <HeroSection />
        <HowItWorks />
        <WhyTerminPlus />
        <Footer />

@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Navbar from './NavBar'; // Importaj novu komponentu
 import '../assets/css/HeroSection.css';
 import backgroundUrl from '../assets/stadium.jpg';
+import { AuthContext } from '../context/AuthContext';
+import { Link } from 'react-router-dom';
 
 const HeroSection = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const { isLoggedIn} = React.useContext(AuthContext);
 
     return (
         <section
@@ -28,15 +30,15 @@ const HeroSection = () => {
                 </p>
 
                 <div className="button-group">
-                    <button className="btn-primary">
+                    <Link to="/matches"on className="btn-primary">
                         Pronađi termin
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-                    </button>
+                    </Link>
 
-                    <button className="btn-secondary">
+                    <Link to="/matches" className="btn-secondary">
                         Kreiraj termin
                         <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                    </button>
+                    </Link>
                 </div>
             </main>
         </section>

@@ -1,10 +1,12 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 
 import '../assets/css/Register.css';
 import Spinner from 'react-bootstrap/Spinner';
+import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Register = () => {
-  
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,14 +15,14 @@ const Register = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  
+
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     try {
       setLoading(true);
-      setMessage(''); 
+      setMessage('');
 
-      
+
       const response = await fetch('http://localhost:3000/user/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,8 +32,8 @@ const Register = () => {
       if (response.ok) {
         setMessage('Uspešna registracija! Sada se možete prijaviti.');
         setTimeout(() => {
-          
-        }, 2000); 
+          navigate('/login');
+        }, 2000);
       } else {
         const errorData = await response.json();
         setMessage(errorData.message || 'Greška prilikom registracije.');
@@ -91,16 +93,16 @@ const Register = () => {
             />
           </div>
 
-        
-          
+
+
           <button type="submit" className="register-btn" disabled={loading}>
             {loading ? <Spinner animation="border" size="sm" /> : 'Registruj se'}
           </button>
-            {message && <p className="register-message">{message}</p>}
+          {message && <p className="register-message">{message}</p>}
         </form>
 
         <div className="register-footer">
-          <p>Već imaš nalog? <a href="/login">Prijavi se</a></p>
+          <p>Već imaš nalog? <Link to ="/login" >Prijavi se</Link></p>
         </div>
       </div>
     </div>

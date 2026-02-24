@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 
 
 import './App.css';
@@ -14,11 +15,18 @@ function App() {
 
   return (
     <>
+    <BrowserRouter>
     <AuthProvider>
-      <Matches />
-      <Login />
+     
+      <Routes>
+        <Route path="/" element={<IndexPage />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/matches" element={<Matches />} />
+      </Routes>
     
     </AuthProvider>
+    </BrowserRouter>
     </>
   )
 }
