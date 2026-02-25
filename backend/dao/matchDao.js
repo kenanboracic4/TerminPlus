@@ -4,7 +4,7 @@ const sequelize = require('../config/db');
 const { literal } = require('sequelize');
 
 module.exports = {
-    async createMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, creatorId){
+    async createMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, creatorId,creatorName){
         return await Match.create({
             title,
             sportId,
@@ -15,7 +15,8 @@ module.exports = {
             longitude,
             address,
             description,
-            creatorId
+            creatorId,
+            creatorName
         })
     },
     async getAllMatches(){

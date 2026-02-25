@@ -1,12 +1,12 @@
 const matchDao = require('../dao/matchDao');
 
 module.exports = {
-    async addMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, userId){
-        console.log("service", title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, userId);
+    async addMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, userId, name){
+        console.log("service", title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, userId, name);
         if(!title || !sportId || !date || !neededPlayers || !pricePerPerson || !latitude || !longitude || !address || !description){
             throw new Error('Sva polja su obavezna');
         }
-        return await matchDao.createMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, userId);
+        return await matchDao.createMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, userId, name);
 
     },
 

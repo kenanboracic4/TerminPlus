@@ -155,14 +155,8 @@ const [userLocation, setUserLocation] = useState(() => {
         }
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:3000/matches/new', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    title: formData.title,
+            const newMatch = {
+                 title: formData.title,
                     sportId: formData.sportId,
                     date: formData.date,
                     neededPlayers: formData.neededPlayers,
@@ -171,12 +165,21 @@ const [userLocation, setUserLocation] = useState(() => {
                     longitude: formData.longitude,
                     address: formData.address,
                     description: formData.description
-                })
+            };
+            const response = await fetch('http://localhost:3000/matches/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(newMatch)
             });
 
             if (response.ok) {
                 setIsOpen(false);
                 setMessage('Termin uspješno kreiran!');
+                
+                setMatches(prev => [newMatch, ...prev]);
             } else {
                 const errorData = await response.json();
                 setMessage(errorData.message || 'Greška prilikom kreiranja termina.');

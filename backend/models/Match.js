@@ -38,6 +38,10 @@ const Match = sequelize.define('Match', {
      type: DataTypes.INTEGER, 
      allowNull: false
      },
+     creatorName: {
+      type: DataTypes.STRING,
+      allowNull: false
+     },
   sportId: {
      type: DataTypes.INTEGER,
       allowNull: false

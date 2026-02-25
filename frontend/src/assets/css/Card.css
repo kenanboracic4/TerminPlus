@@ -262,28 +262,71 @@ button {
    ========================================= */
 @media (max-width: 768px) {
   .card-main {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 20px;
+    display: grid;
+    /* Prva kolona uzima slobodan prostor (1fr), druga uzima samo onoliko koliko joj treba (auto) */
+    grid-template-columns: 1fr auto; 
+    gap: 16px;
+    padding: 16px;
+    align-items: start; /* Ravnanje prema vrhu */
   }
 
-  .card-col {
-    width: 100%;
+  /* 1. RED (LIJEVO): Naslov, sport i bedž */
+  .title-col {
+    grid-column: 1 / 2;
+    grid-row: 1;
+    min-width: 0; /* Sprečava da dugačak naslov izgura grid */
   }
 
+  .title-col h2 {
+    font-size: 18px; /* Malo manji naslov na mobitelu */
+    margin-bottom: 6px;
+  }
+
+  /* 1. RED (DESNO): Vrijeme, datum, cijena - U LINIJI SA NASLOVOM */
+  .time-col {
+    grid-column: 2 / 3;
+    grid-row: 1;
+    align-items: flex-end; /* Gura ikonice i tekst uz desnu ivicu */
+    gap: 6px;
+  }
+
+  .time-col .info-item {
+    font-size: 13px;
+  }
+
+  /* 2. RED: Lokacija ispod svega, uzima punu širinu */
+  .location-col {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05); /* Diskretna linija koja odvaja lokaciju */
+    justify-content: flex-start;
+  }
+
+  /* Smanjen font za lokaciju na mobu */
+  .loc-name, .distance-row {
+    font-size: 13px;
+  }
+
+  /* 3. RED: Akcije (Dugmad) na dnu, zauzimaju punu širinu */
   .actions-col {
-    flex-direction: row; /* Dugmad idu jedno pored drugog na mobu */
-    align-items: center;
-    max-width: 100%;
+    grid-column: 1 / -1;
+    grid-row: 3;
+    flex-direction: row; /* Jedno pored drugog */
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
   }
 
   button {
-    max-width: 100%; /* Dugmad zauzimaju sav dostupan prostor u redu */
+    flex: 1; /* Oba dugmeta dele po tačno 50% prostora */
+    max-width: none; 
+    padding: 12px 8px;
+    font-size: 12px;
   }
 
   .details-grid {
-    grid-template-columns: 1fr; /* Sve u jednu kolonu na mobu */
+    grid-template-columns: 1fr; 
     gap: 20px;
   }
 }

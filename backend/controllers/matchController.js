@@ -7,7 +7,7 @@ module.exports = {
         const {title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description} = req.body;
         try {
             
-            await matchService.addMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, req.user.userId);
+            await matchService.addMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, req.user.userId, req.user.name);
             res.status(200).json({message: 'Uspešno kreiran termin!'});
         }catch(error){
             
