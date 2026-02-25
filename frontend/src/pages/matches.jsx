@@ -234,7 +234,7 @@ const [userLocation, setUserLocation] = useState(() => {
                     <div className="form-glass-card">
                         <div className="form-header">
                             <h3>Kreiraj novi termin</h3>
-                            <p>Popuni detalje za tvoj novi meč</p>
+                            <p>Popuni detalje za tvoj novi termin</p>
                         </div>
 
                         <form className="match-form" onSubmit={handleSubmit}>
@@ -278,7 +278,7 @@ const [userLocation, setUserLocation] = useState(() => {
 
 
                             <div className="input-group">
-                                <label><Users size={14} /> Max broj igrača</label>
+                                <label><Users size={14} /> Potreban broj igrača</label>
                                 <input type="number"
                                     name="maxPlayers"
                                     min="2"
