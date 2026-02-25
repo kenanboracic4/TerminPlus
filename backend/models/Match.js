@@ -18,7 +18,7 @@ const Match = sequelize.define('Match', {
      type: DataTypes.DATE, 
      allowNull: false 
     },
-  maxPlayers: { 
+  neededPlayers: { 
     type: DataTypes.INTEGER, 
     allowNull: false
  },

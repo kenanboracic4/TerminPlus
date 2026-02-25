@@ -4,12 +4,12 @@ const sequelize = require('../config/db');
 const { literal } = require('sequelize');
 
 module.exports = {
-    async createMatch(title, sportId, date, maxPlayers, pricePerPerson, latitude, longitude, address, description, creatorId){
+    async createMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, creatorId){
         return await Match.create({
             title,
             sportId,
             date,
-            maxPlayers,
+            neededPlayers,
             pricePerPerson,
             latitude,
             longitude,
@@ -25,5 +25,9 @@ module.exports = {
                 limit: 10
             }
         );
+    },
+    async getAllSports(){
+        console.log("dao");
+        return await Sport.findAll();
     }
 }
