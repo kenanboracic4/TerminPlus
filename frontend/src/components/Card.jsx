@@ -69,7 +69,7 @@ const Card = ({ data, userLocations}) => {
           <span>
   {userLocations 
     ? `${izracunajUdaljenost(data.latitude, data.longitude,userLocations.lat, userLocations.lon).toFixed(1)} km udaljeno` 
-    : "Računam udaljenost..."}
+    : "Prihvatite lokaciju da bi vidjeli udaljenost..."}
 </span>
           </div>
         </div>

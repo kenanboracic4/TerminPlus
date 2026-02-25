@@ -33,29 +33,55 @@ const Matches = () => {
     const [query, setQuery] = useState("");
     const [matches, setMatches] = useState([]);
     const [sports, setSports] = useState([]);
-    const [userLocation, setUserLocation] = useState(null);
+    
 
+const [userLocation, setUserLocation] = useState(() => {
+        const saved = localStorage.getItem('userLocation');
+        return saved ? JSON.parse(saved) : null;
+    });
+    
+   
 
-
-   useEffect(() => {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const newCoords = {
-                    lat: position.coords.latitude,
-                    lon: position.coords.longitude
-                };
-                console.log("Stigla lokacija:", newCoords);
-                setUserLocation(newCoords);
-            },
-            (error) => {
-                console.error("Korisnik odbio lokaciju:", error);
-                setUserLocation(null);
+    useEffect(() => {
+        
+        const fetchFastLocation = async () => {
+            if (userLocation) return; 
+            try {
+                const res = await fetch('https://ipapi.co/json/');
+                const data = await res.json();
+                if (data.latitude && data.longitude) {
+                    const coords = { lat: data.latitude, lon: data.longitude };
+                    setUserLocation(coords);
+                    localStorage.setItem('userLocation', JSON.stringify(coords));
+                }
+            } catch (e) {
+                console.log("IP lokacija nije uspjela");
             }
-        );
-    }
-}, []);
+        };
 
+        fetchFastLocation();
+
+       
+        if (navigator.geolocation) {
+            const watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    const newCoords = {
+                        lat: position.coords.latitude,
+                        lon: position.coords.longitude
+                    };
+                    setUserLocation(newCoords);
+                    localStorage.setItem('userLocation', JSON.stringify(newCoords)); // Spasi za idući put
+                },
+                (error) => console.error(error),
+                { 
+                    enableHighAccuracy: false, 
+                    timeout: 5000, 
+                    maximumAge: 10000 
+                }
+            );
+            return () => navigator.geolocation.clearWatch(watchId);
+        }
+    }, []);
 
     useEffect(() => {
 
