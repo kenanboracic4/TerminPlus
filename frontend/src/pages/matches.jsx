@@ -14,9 +14,9 @@ const Matches = () => {
     const { token } = useContext(AuthContext);
     const [formData, setFormData] = useState({
         title: '',
-        sportId: '', 
+        sportId: '',
         date: '',
-        maxPlayers: '',
+        neededPlayers: '',
         pricePerPerson: '',
         latitude: '',
         longitude: '',
@@ -27,20 +27,55 @@ const Matches = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [distance, setDistance] = useState(20); 
+    const [distance, setDistance] = useState(50);
 
-    const [results, setResults] = useState([]); 
-    const [query, setQuery] = useState("");      
+    const [results, setResults] = useState([]);
+    const [query, setQuery] = useState("");
     const [matches, setMatches] = useState([]);
+    const [sports, setSports] = useState([]);
+    const [userLocation, setUserLocation] = useState(null);
 
-    useEffect( ()=> {
-       
+
+
+   useEffect(() => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const newCoords = {
+                    lat: position.coords.latitude,
+                    lon: position.coords.longitude
+                };
+                console.log("Stigla lokacija:", newCoords);
+                setUserLocation(newCoords);
+            },
+            (error) => {
+                console.error("Korisnik odbio lokaciju:", error);
+                setUserLocation(null);
+            }
+        );
+    }
+}, []);
+
+
+    useEffect(() => {
+
+        const fetchSports = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/matches/sports');
+                const data = await response.json();
+                setSports(data);
+
+            } catch (error) {
+                console.log(error);
+                setSports([]);
+            }
+        }
         const fetchMatches = async () => {
             try {
                 const response = await fetch('http://localhost:3000/matches/all');
                 const data = await response.json();
                 setMatches(data);
-                console.log("ucitani termini", data);
+
             } catch (error) {
                 console.error(error);
                 setMatches([]);
@@ -48,9 +83,10 @@ const Matches = () => {
             }
         }
         fetchMatches();
-    },[]);
+        fetchSports();
+    }, []);
 
-    
+
     useEffect(() => {
         if (query.length < 3) {
             setResults([]);
@@ -88,22 +124,22 @@ const Matches = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!token) {
-        setMessage("Greška: Niste ulogovani!");
-        return;
-    }
-        try{
+            setMessage("Greška: Niste ulogovani!");
+            return;
+        }
+        try {
             setLoading(true);
-            const response = await fetch ('http://localhost:3000/matches/new', {
+            const response = await fetch('http://localhost:3000/matches/new', {
                 method: 'POST',
                 headers: {
-                    'Content-Type' : 'application/json',
+                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
                     title: formData.title,
                     sportId: formData.sportId,
                     date: formData.date,
-                    maxPlayers: formData.maxPlayers,
+                    neededPlayers: formData.neededPlayers,
                     pricePerPerson: formData.pricePerPerson,
                     latitude: formData.latitude,
                     longitude: formData.longitude,
@@ -112,16 +148,17 @@ const Matches = () => {
                 })
             });
 
-            if(response.ok){
+            if (response.ok) {
+                setIsOpen(false);
                 setMessage('Termin uspješno kreiran!');
-            }else{
+            } else {
                 const errorData = await response.json();
                 setMessage(errorData.message || 'Greška prilikom kreiranja termina.');
             }
-        }catch(error){
+        } catch (error) {
             console.error(error);
             setMessage('Greška prilikom slanja podataka.');
-        }finally{
+        } finally {
             setLoading(false);
         }
     };
@@ -131,13 +168,17 @@ const Matches = () => {
             <Navbar isLoggedIn={true} />
 
             <div className="match-manager-container">
-              
+
                 <div className="top-bar-glass">
                     <div className="filter-group">
                         <select name="sportFilter" className="custom-select">
-                            <option value="football">Fudbal</option>
-                            <option value="basketball">Košarka</option>
-                            <option value="tennis">Tenis</option>
+                            <option value="">Odaberi sport</option>
+                            {sports.length > 0 ? sports.map((sport) => {
+                                return <option key={sport.id} value={sport.id}>{sport.name}</option>
+                            })
+                                :
+                                <option value="">Nema sportova</option>
+                            }
                         </select>
 
                         <div className="slider-container">
@@ -170,8 +211,8 @@ const Matches = () => {
                             <p>Popuni detalje za tvoj novi meč</p>
                         </div>
 
-                        <form  className="match-form" onSubmit={handleSubmit}>
-                           
+                        <form className="match-form" onSubmit={handleSubmit}>
+
                             <div className="input-group full-width">
                                 <label>Naslov termina</label>
                                 <input type="text"
@@ -183,17 +224,21 @@ const Matches = () => {
                                 />
                             </div>
 
-                            
+
                             <div className="input-group">
                                 <label>Sport</label>
-                                <select 
-                                    name="sportId" 
-                                    value={formData.sportId} 
+                                <select
+                                    name="sportId"
+                                    value={formData.sportId}
                                     onChange={(e) => setFormData({ ...formData, sportId: e.target.value })}
                                 >
-                                    <option value="1">Fudbal</option>
-                                    <option value="2">Košarka</option>
-                                    <option value="3">Tenis</option>
+                                    <option value="">Odaberi sport</option>
+                                    {sports.length > 0 ? sports.map((sport) => {
+                                        return <option key={sport.id} value={sport.id}>{sport.name}</option>
+                                    })
+                                        :
+                                        <option value="">Nema sportova</option>
+                                    }
                                 </select>
                             </div>
                             <div className="input-group">
@@ -205,35 +250,35 @@ const Matches = () => {
                                 />
                             </div>
 
-                            
+
                             <div className="input-group">
                                 <label><Users size={14} /> Max broj igrača</label>
-                                <input type="number" 
+                                <input type="number"
                                     name="maxPlayers"
                                     min="2"
                                     max="22"
                                     placeholder="npr. 10"
-                                    value={formData.maxPlayers}
-                                    onChange={(e) => setFormData({ ...formData, maxPlayers: e.target.value })}
+                                    value={formData.neededPlayers}
+                                    onChange={(e) => setFormData({ ...formData, neededPlayers: e.target.value })}
                                     required
                                 />
                             </div>
                             <div className="input-group">
                                 <label><DollarSign size={14} /> Cena po osobi (KM)</label>
-                                <input type="number" 
+                                <input type="number"
                                     step="0.5"
-                                    name="pricePerPerson" 
+                                    name="pricePerPerson"
                                     placeholder="npr. 5.50"
                                     value={formData.pricePerPerson}
                                     onChange={(e) => setFormData({ ...formData, pricePerPerson: e.target.value })}
                                 />
                             </div>
 
-                           
+
                             <div className="input-group full-width">
                                 <label><MapPin size={14} /> Adresa lokacije</label>
-                                <input type="text" 
-                                    name="address" 
+                                <input type="text"
+                                    name="address"
                                     placeholder='Pretraži lokaciju (npr. Zetra, Sarajevo)'
                                     value={query}
                                     onChange={(e) => setQuery(e.target.value)}
@@ -249,17 +294,17 @@ const Matches = () => {
                                         ))}
                                     </ul>
                                 )}
-                              
+
                                 <input type="hidden" name="latitude" value={formData.latitude} />
                                 <input type="hidden" name="longitude" value={formData.longitude} />
                             </div>
 
-                            
+
                             <div className="input-group full-width">
                                 <label><AlignLeft size={14} /> Dodatni opis</label>
                                 <textarea
-                                    name="description" 
-                                    rows="3" 
+                                    name="description"
+                                    rows="3"
                                     placeholder="Pravila, informacije o opremi..."
                                     value={formData.description}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -275,15 +320,15 @@ const Matches = () => {
 
                 <div className="matches-list">
                     {matches.length > 1 ?
-                    <div className="matches-container-list">
+                        <div className="matches-container-list">
 
-                    {matches.map((match) => {
-                        return <Card key={match.id} data={match} />;
-                    })}
-                    </div>
-                    : <p className="no-matches-message">Nema dostupnih termina. Budi prvi koji će kreirati termin!</p> 
-                }
-                    </div>
+                            {matches.map((match) => {
+                                return <Card key={match.id} data={match} userLocations={userLocation} />;
+                            })}
+                        </div>
+                        : <p className="no-matches-message">Nema dostupnih termina. Budi prvi koji će kreirati termin!</p>
+                    }
+                </div>
             </div>
         </>
     );

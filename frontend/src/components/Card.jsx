@@ -11,10 +11,24 @@ import {
 } from "lucide-react";
 import "../assets/css/Card.css";
 
-const Card = ({ data }) => {
+const Card = ({ data, userLocations}) => {
  
+  console.log("location:", userLocations)
   const [showDetails, setShowDetails] = useState(false);
+  console.table("Card data: ", data);
 
+  const izracunajUdaljenost = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; 
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    
+    const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c; 
+};
   return (
     <div className="term-card">
       
@@ -26,7 +40,7 @@ const Card = ({ data }) => {
           <h2>{data?.title || "IME TERMINA"}</h2>
           <div className="player-badge">
             <Users size={16} />
-            <span>2 IGRAČA</span>
+            <span>{data?.neededPlayers} IGRAČA</span>
           </div>
         </div>
 
@@ -34,11 +48,11 @@ const Card = ({ data }) => {
         <div className="card-col time-col">
           <div className="info-item">
             <Clock size={18} className="icon" />
-            <span>21:00</span>
+            <span>{data.date.split('T')[1].split(':')[0]}:{data.date.split('T')[1].split(':')[1]}</span>
           </div>
           <div className="info-item">
             <Calendar size={18} className="icon" />
-            <span>21.02.2026</span>
+            <span>{new Date(data.date).toLocaleDateString('sr-Latn-BA')}</span>
           </div>
         </div>
 
@@ -46,11 +60,17 @@ const Card = ({ data }) => {
         <div className="card-col location-col">
           <div className="loc-row">
             <MapPin size={18} className="icon-green" />
-            <span className="loc-name">Sportski Centar "Arena"</span>
+            <span className="loc-name">{data.address.split(',')[0]}  {data.address.split(',')[1] && data.address.split(',')[1].trim().length <= 3 
+    ? `, ${data.address.split(',')[1].trim()}` 
+    : ""}</span>
           </div>
           <div className="distance-row">
             <Navigation size={14} className="icon" />
-            <span>2.5 km udaljeno</span>
+          <span>
+  {userLocations 
+    ? `${izracunajUdaljenost(data.latitude, data.longitude,userLocations.lat, userLocations.lon).toFixed(1)} km udaljeno` 
+    : "Računam udaljenost..."}
+</span>
           </div>
         </div>
 
