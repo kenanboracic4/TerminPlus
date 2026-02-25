@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 
+router.get('/all', matchController.getAllMatches);
 router.post('/new', verifyToken, matchController.handleAddMatch);
 
 module.exports = router;

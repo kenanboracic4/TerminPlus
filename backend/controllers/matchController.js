@@ -15,5 +15,16 @@ module.exports = {
             res.status(500).json({message: error.message});
         }
 
+    },
+
+    async getAllMatches(req,res){
+        try {
+            const matches = await matchService.getAllMatches();
+            console.log(matches);
+            res.status(200).json(matches);
+        }catch(error){
+            console.log(error);
+            res.status(500).json({message: error.message});
+        }
     }
 }

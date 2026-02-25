@@ -31,6 +31,24 @@ const Matches = () => {
 
     const [results, setResults] = useState([]); 
     const [query, setQuery] = useState("");      
+    const [matches, setMatches] = useState([]);
+
+    useEffect( ()=> {
+       
+        const fetchMatches = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/matches/all');
+                const data = await response.json();
+                setMatches(data);
+                console.log("ucitani termini", data);
+            } catch (error) {
+                console.error(error);
+                setMatches([]);
+                setMessage('Greška prilikom učitavanja termina.');
+            }
+        }
+        fetchMatches();
+    },[]);
 
     
     useEffect(() => {
@@ -256,8 +274,16 @@ const Matches = () => {
                 )}
 
                 <div className="matches-list">
-                    <Card />
-                </div>
+                    {matches.length > 1 ?
+                    <div className="matches-container-list">
+
+                    {matches.map((match) => {
+                        return <Card key={match.id} data={match} />;
+                    })}
+                    </div>
+                    : <p className="no-matches-message">Nema dostupnih termina. Budi prvi koji će kreirati termin!</p> 
+                }
+                    </div>
             </div>
         </>
     );

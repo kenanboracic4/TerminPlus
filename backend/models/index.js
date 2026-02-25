@@ -9,7 +9,7 @@ const Review = require('./Review'); // Dodano da uvezemo i ocjenjivanje
 
 // 2. Relacije za Sport
 Sport.hasMany(Match, { foreignKey: 'sportId' });
-Match.belongsTo(Sport, { foreignKey: 'sportId' });
+Match.belongsTo(Sport, { foreignKey: 'sportId', as: 'sport' });
 
 // 3. Relacije između Korisnika i Termina (Kreator termina)
 User.hasMany(Match, { foreignKey: 'creatorId', as: 'CreatedMatches' });

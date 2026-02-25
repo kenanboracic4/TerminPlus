@@ -297,6 +297,9 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   .full-width {
     grid-column: span 1;
   }
+  .matches-container-list{
+    width: 95%;
+  }
 }
 .location-results {
   position: absolute;
@@ -334,4 +337,10 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
 .location-results li:last-child {
   border-bottom: none;
+}
+.matches-container-list{
+  margin: 0 auto; 
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
