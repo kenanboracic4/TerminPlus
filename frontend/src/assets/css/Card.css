@@ -319,7 +319,7 @@ button {
   }
 
   button {
-    flex: 1; /* Oba dugmeta dele po tačno 50% prostora */
+    flex: 1; 
     max-width: none; 
     padding: 12px 8px;
     font-size: 12px;

@@ -28,24 +28,25 @@ const Matches = () => {
     const [loading, setLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [distance, setDistance] = useState(50);
+    const [selectedSport, setSelectedSport] = useState('');
 
     const [results, setResults] = useState([]);
     const [query, setQuery] = useState("");
     const [matches, setMatches] = useState([]);
     const [sports, setSports] = useState([]);
-    
 
-const [userLocation, setUserLocation] = useState(() => {
+
+    const [userLocation, setUserLocation] = useState(() => {
         const saved = localStorage.getItem('userLocation');
         return saved ? JSON.parse(saved) : null;
     });
-    
-   
+
+
 
     useEffect(() => {
-        
+
         const fetchFastLocation = async () => {
-            if (userLocation) return; 
+            if (userLocation) return;
             try {
                 const res = await fetch('https://ipapi.co/json/');
                 const data = await res.json();
@@ -61,7 +62,7 @@ const [userLocation, setUserLocation] = useState(() => {
 
         fetchFastLocation();
 
-       
+
         if (navigator.geolocation) {
             const watchId = navigator.geolocation.watchPosition(
                 (position) => {
@@ -73,10 +74,10 @@ const [userLocation, setUserLocation] = useState(() => {
                     localStorage.setItem('userLocation', JSON.stringify(newCoords)); // Spasi za idući put
                 },
                 (error) => console.error(error),
-                { 
-                    enableHighAccuracy: false, 
-                    timeout: 5000, 
-                    maximumAge: 10000 
+                {
+                    enableHighAccuracy: false,
+                    timeout: 5000,
+                    maximumAge: 10000
                 }
             );
             return () => navigator.geolocation.clearWatch(watchId);
@@ -156,15 +157,15 @@ const [userLocation, setUserLocation] = useState(() => {
         try {
             setLoading(true);
             const newMatch = {
-                 title: formData.title,
-                    sportId: formData.sportId,
-                    date: formData.date,
-                    neededPlayers: formData.neededPlayers,
-                    pricePerPerson: formData.pricePerPerson,
-                    latitude: formData.latitude,
-                    longitude: formData.longitude,
-                    address: formData.address,
-                    description: formData.description
+                title: formData.title,
+                sportId: formData.sportId,
+                date: formData.date,
+                neededPlayers: formData.neededPlayers,
+                pricePerPerson: formData.pricePerPerson,
+                latitude: formData.latitude,
+                longitude: formData.longitude,
+                address: formData.address,
+                description: formData.description
             };
             const response = await fetch('http://localhost:3000/matches/new', {
                 method: 'POST',
@@ -178,7 +179,7 @@ const [userLocation, setUserLocation] = useState(() => {
             if (response.ok) {
                 setIsOpen(false);
                 setMessage('Termin uspješno kreiran!');
-                
+
                 setMatches(prev => [newMatch, ...prev]);
             } else {
                 const errorData = await response.json();
@@ -192,45 +193,63 @@ const [userLocation, setUserLocation] = useState(() => {
         }
     };
 
+    const handleSearch = (e) => {
+        e.preventDefault();
+        console.log("Pretrata", selectedSport);
+        console.log("Udaljenost", distance);
+
+    }
+
     return (
+
         <>
             <Navbar isLoggedIn={true} />
 
             <div className="match-manager-container">
 
                 <div className="top-bar-glass">
-                    <div className="filter-group">
-                        <select name="sportFilter" className="custom-select">
-                            <option value="">Odaberi sport</option>
-                            {sports.length > 0 ? sports.map((sport) => {
-                                return <option key={sport.id} value={sport.id}>{sport.name}</option>
-                            })
-                                :
-                                <option value="">Nema sportova</option>
-                            }
-                        </select>
+                    {/* Forma sada obmotava sve, ali unutra koristimo flex raspored */}
+                    <form onSubmit={handleSearch} className="filter-form-wrapper">
+                        <div className="filter-group">
+                            <select
+                                name="sportFilter"
+                                className="custom-select"
+                                value={selectedSport}
+                                onChange={(e) => setSelectedSport(e.target.value)}
+                            >
+                                <option value="">Odaberi sport</option>
+                                {sports.length > 0 ? sports.map((sport) => (
+                                    <option key={sport.id} value={sport.id}>{sport.name}</option>
+                                )) : <option value="">Nema sportova</option>}
+                            </select>
 
-                        <div className="slider-container">
-                            <label>Udaljenost: <span>{distance} km</span></label>
-                            <input
-                                type="range"
-                                min="1"
-                                max="50"
-                                value={distance}
-                                onChange={(e) => setDistance(e.target.value)}
-                                className="custom-slider"
-                            />
+                            <div className="slider-container">
+                                <label>Udaljenost: <span>{distance} km</span></label>
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="50"
+                                    value={distance}
+                                    onChange={(e) => setDistance(e.target.value)}
+                                    className="custom-slider"
+                                />
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="action-group">
-                        <button className="btn-search">
-                            <Search size={16} /> PRETRAŽI
-                        </button>
-                        <button onClick={() => setIsOpen(!isOpen)} className="btn-publish">
-                            <Plus size={16} /> {isOpen ? "ZATVORI" : "OBJAVI"}
-                        </button>
-                    </div>
+                        <div className="action-group">
+                            <button type="submit" className="btn-search">
+                                <Search size={16} /> PRETRAŽI
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setIsOpen(!isOpen)}
+                                className="btn-publish"
+                            >
+                                <Plus size={16} /> {isOpen ? "ZATVORI" : "OBJAVI"}
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 {isOpen && (
