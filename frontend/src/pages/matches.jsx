@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import {
     Search, Plus, MapPin, AlignLeft, Calendar,
     Users, DollarSign, Map
@@ -40,6 +40,17 @@ const Matches = () => {
         const saved = localStorage.getItem('userLocation');
         return saved ? JSON.parse(saved) : null;
     });
+
+
+    const izracunajUdaljenost = (lat1, lon1, lat2, lon2) => {
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    };
 
 
 
@@ -193,12 +204,29 @@ const Matches = () => {
         }
     };
 
-    const handleSearch = (e) => {
-        e.preventDefault();
-        console.log("Pretrata", selectedSport);
-        console.log("Udaljenost", distance);
+    const filteredMatches = useMemo(() => {
 
-    }
+        if (!matches) return [];
+
+        return matches.filter(match => {
+
+            const sportMatches = !selectedSport || String(match.sportId) === String(selectedSport);
+
+
+            let distanceMatches = true;
+            if (userLocation && match.latitude && match.longitude) {
+                const km = izracunajUdaljenost(
+                    match.latitude, match.longitude,
+                    userLocation.lat, userLocation.lon
+                );
+                distanceMatches = km <= Number(distance);
+            }
+
+            return sportMatches && distanceMatches;
+        });
+    }, [matches, selectedSport, distance, userLocation]);
+
+
 
     return (
 
@@ -208,8 +236,8 @@ const Matches = () => {
             <div className="match-manager-container">
 
                 <div className="top-bar-glass">
-                    {/* Forma sada obmotava sve, ali unutra koristimo flex raspored */}
-                    <form onSubmit={handleSearch} className="filter-form-wrapper">
+
+                    <form className="filter-form-wrapper">
                         <div className="filter-group">
                             <select
                                 name="sportFilter"
@@ -367,17 +395,17 @@ const Matches = () => {
                 )}
 
                 <div className="matches-list">
-                    {matches.length > 1 ?
+                    {filteredMatches.length > 0 ?
                         <div className="matches-container-list">
 
-                            {matches.map((match) => {
+                            {filteredMatches.map((match) => {
                                 return <Card key={match.id} data={match} userLocations={userLocation} />;
                             })}
                         </div>
                         : <p className="no-matches-message">Nema dostupnih termina. Budi prvi koji će kreirati termin!</p>
                     }
                 </div>
-            </div>
+            </div >
         </>
     );
 }

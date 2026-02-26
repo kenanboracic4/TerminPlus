@@ -24,18 +24,18 @@ const Card = ({ data, userLocations }) => {
     const dLat = (lat2 - lat1) * Math.PI / 180;
     const dLon = (lon2 - lon1) * Math.PI / 180;
     const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     return R * c;
   };
 
-  // UX Kalkulacije za igrače
+
   const ukupnoMjesta = data?.neededPlayers || 1;
   const popunjenaMjesta = data?.currentPlayers || 1;
   const slobodnaMjesta = Math.max(0, ukupnoMjesta - popunjenaMjesta);
   const isPopunjeno = slobodnaMjesta === 0;
 
-  // Formatiranje vremena
+
   const terminDatum = data?.date ? new Date(data.date) : null;
   const vrijeme = terminDatum ? terminDatum.toLocaleTimeString('sr-Latn-BA', { hour: '2-digit', minute: '2-digit' }) : "00:00";
   const datumOdržavanja = terminDatum ? terminDatum.toLocaleDateString('sr-Latn-BA') : "Nepoznato";
@@ -43,7 +43,7 @@ const Card = ({ data, userLocations }) => {
   return (
     <div className="term-card" style={{ opacity: isPopunjeno ? 0.8 : 1 }}>
       <div className="card-main">
-        
+
         {/* KOLONA 1: Naslov, Sport i Status Igrača */}
         <div className="card-col title-col">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
@@ -54,18 +54,18 @@ const Card = ({ data, userLocations }) => {
               <Activity size={12} /> {data?.status}
             </span>
           </div>
-          
+
           <h2>{data?.title || "IME TERMINA"}</h2>
-          
-          <div className="player-badge" style={{ 
+
+          <div className="player-badge" style={{
             backgroundColor: isPopunjeno ? 'rgba(239, 68, 68, 0.15)' : 'var(--accent-yellow-dim)',
             color: isPopunjeno ? '#ef4444' : 'var(--accent-yellow)',
             borderColor: isPopunjeno ? 'rgba(239, 68, 68, 0.2)' : 'rgba(250, 204, 21, 0.2)'
           }}>
             <Users size={16} />
             <span>
-              {isPopunjeno 
-                ? "SVA MJESTA POPUNJENA" 
+              {isPopunjeno
+                ? "SVA MJESTA POPUNJENA"
                 : `FALI JOŠ ${slobodnaMjesta} ${slobodnaMjesta === 1 ? 'IGRAČ' : 'IGRAČA'}`}
             </span>
           </div>
@@ -92,7 +92,7 @@ const Card = ({ data, userLocations }) => {
           <div className="loc-row">
             <MapPin size={18} className="icon-green" />
             <span className="loc-name">
-              {data?.address?.split(',')[0]} 
+              {data?.address?.split(',')[0]}
               {data?.address?.split(',')[1] && data?.address?.split(',')[1].trim().length <= 3
                 ? `, ${data.address.split(',')[1].trim()}`
                 : ""}
@@ -117,11 +117,11 @@ const Card = ({ data, userLocations }) => {
             {showDetails ? "SAKRIJ DETALJE" : "VIŠE DETALJA"}
             {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
-          <button 
-            className="btn-join" 
+          <button
+            className="btn-join"
             disabled={isPopunjeno}
-            style={{ 
-              backgroundColor: isPopunjeno ? '#333' : 'var(--accent-yellow)', 
+            style={{
+              backgroundColor: isPopunjeno ? '#333' : 'var(--accent-yellow)',
               color: isPopunjeno ? '#888' : '#000',
               cursor: isPopunjeno ? 'not-allowed' : 'pointer',
               boxShadow: isPopunjeno ? 'none' : ''
@@ -136,18 +136,18 @@ const Card = ({ data, userLocations }) => {
       {showDetails && (
         <div className="details-section">
           <div className="details-grid">
-            
+
             {/* LJEVA STRANA: Opis */}
             <div className="details-block">
               <h4><AlignLeft size={16} className="icon-green" /> O terminu</h4>
               <p style={{ marginBottom: "20px" }}>
                 {data?.description || "Organizator nije dodao specifičan opis za ovaj termin."}
               </p>
-              
+
               <div style={{ display: "flex", flexDirection: "column", gap: "12px", background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '8px' }}>
                 <div className="info-item">
                   <User size={16} className="icon" />
-                  <span>Organizator: <strong style={{color: "var(--text-main)"}}>{data?.creatorName}</strong></span>
+                  <span>Organizator: <strong style={{ color: "var(--text-main)" }}>{data?.creatorName}</strong></span>
                 </div>
                 <div className="info-item">
                   <Info size={16} className="icon" />
@@ -159,7 +159,7 @@ const Card = ({ data, userLocations }) => {
             {/* DESNA STRANA: Igrači */}
             <div className="details-block">
               <h4><Users size={16} className="icon-green" /> Prijavljeni igrači ({popunjenaMjesta}/{ukupnoMjesta})</h4>
-              
+
               <ul className="player-list">
                 {/* Zauzeta mjesta */}
                 {[...Array(popunjenaMjesta)].map((_, index) => (
@@ -167,7 +167,7 @@ const Card = ({ data, userLocations }) => {
                     {index === 0 ? `👑 ${data?.creatorName} (Organizator)` : "👤 Zauzeto mjesto"}
                   </li>
                 ))}
-                
+
                 {/* Slobodna mjesta */}
                 {[...Array(slobodnaMjesta)].map((_, index) => (
                   <li key={`empty-${index}`} className="empty-slot">
