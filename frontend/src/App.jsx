@@ -1,4 +1,4 @@
-import { useState , useContext} from 'react'
+import { useState, useContext } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { AuthProvider } from './context/AuthContext';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
@@ -9,14 +9,16 @@ import IndexPage from './pages/index';
 import Register from './pages/register';
 import Login from './pages/login';
 import Matches from './pages/matches';
+import UserProfile from './pages/userPage';
+
 
 
 
 const ProtectedRoute = ({ children }) => {
-  const {token} = useContext(AuthContext);
-  
+  const { token } = useContext(AuthContext);
+
   if (!token) {
-    
+
     return <Navigate to="/login" replace />;
   }
   return children;
@@ -24,22 +26,31 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <AuthProvider> 
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
-          
+
           <Route path="/" element={<IndexPage />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          
-         
-          <Route 
-            path="/matches" 
+
+
+
+          <Route
+            path="/matches"
             element={
               <ProtectedRoute>
                 <Matches />
               </ProtectedRoute>
-            } 
+            }
+          />
+          <Route
+            path="/user-profile"
+            element={
+              <ProtectedRoute>
+                <UserProfile />
+              </ProtectedRoute>
+            }
           />
         </Routes>
       </BrowserRouter>
