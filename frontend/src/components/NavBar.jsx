@@ -30,19 +30,20 @@ const Navbar = () => {
           </>
         ) : (
           <div className="user-profile-container">
-            <div className="user-info">
-              <div className="user-avatar">
-                {/* SVG ikonica za korisnika */}
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
+            <Link to="/user-profile" >
+              <div className="user-info">
+                <div className="user-avatar">
+                  {/* SVG ikonica za korisnika */}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                </div>
+                <span className="user-name">
+                  {userData?.name || "Korisnik"}
+                </span>
               </div>
-              <span className="user-name">
-                {userData?.name || "Korisnik"}
-              </span>
-            </div>
-            
+            </Link>
             {/* Uspravna tanka linija */}
             <div className="nav-divider"></div>
 

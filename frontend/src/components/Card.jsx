@@ -30,6 +30,7 @@ const Card = ({ data, userLocations }) => {
   };
 
 
+
   const ukupnoMjesta = data?.neededPlayers || 1;
   const popunjenaMjesta = data?.currentPlayers || 1;
   const slobodnaMjesta = Math.max(0, ukupnoMjesta - popunjenaMjesta);
@@ -44,7 +45,7 @@ const Card = ({ data, userLocations }) => {
     <div className="term-card" style={{ opacity: isPopunjeno ? 0.8 : 1 }}>
       <div className="card-main">
 
-        {/* KOLONA 1: Naslov, Sport i Status Igrača */}
+
         <div className="card-col title-col">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <span style={{ fontSize: '12px', color: 'var(--accent-yellow)', textTransform: 'uppercase', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -87,7 +88,7 @@ const Card = ({ data, userLocations }) => {
           </div>
         </div>
 
-        {/* KOLONA 3: Lokacija i Udaljenost */}
+
         <div className="card-col location-col">
           <div className="loc-row">
             <MapPin size={18} className="icon-green" />
@@ -108,7 +109,7 @@ const Card = ({ data, userLocations }) => {
           </div>
         </div>
 
-        {/* KOLONA 4: Akcije */}
+
         <div className="card-col actions-col">
           <button
             className="btn-details"
@@ -157,25 +158,7 @@ const Card = ({ data, userLocations }) => {
             </div>
 
             {/* DESNA STRANA: Igrači */}
-            <div className="details-block">
-              <h4><Users size={16} className="icon-green" /> Prijavljeni igrači ({popunjenaMjesta}/{ukupnoMjesta})</h4>
 
-              <ul className="player-list">
-                {/* Zauzeta mjesta */}
-                {[...Array(popunjenaMjesta)].map((_, index) => (
-                  <li key={`filled-${index}`}>
-                    {index === 0 ? `👑 ${data?.creatorName} (Organizator)` : "👤 Zauzeto mjesto"}
-                  </li>
-                ))}
-
-                {/* Slobodna mjesta */}
-                {[...Array(slobodnaMjesta)].map((_, index) => (
-                  <li key={`empty-${index}`} className="empty-slot">
-                    + Rezerviši ovo mjesto
-                  </li>
-                ))}
-              </ul>
-            </div>
 
           </div>
         </div>
