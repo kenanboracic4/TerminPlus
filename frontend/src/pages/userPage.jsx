@@ -1,11 +1,49 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import '../assets/css/UserProfile.css';
 import Navbar from '../components/NavBar';
+import { AuthContext } from '../context/AuthContext';
 
 const UserProfile = () => {
+    const { token } = useContext(AuthContext);
+    const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('aktivni');
+    const [userData, setUserData] = useState({
+        name: '',
+        email: '',
+        avgReview: 0
+    })
 
-    // Dummy podaci za prikaz
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                console.log(token);
+
+                const response = await fetch('http://localhost:3000/user/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+
+                    }
+
+                });
+                const data = await response.json();
+                setUserData({
+                    name: data.name,
+                    email: data.email,
+                    avgReview: data.avgReview
+                })
+                setLoading(false);
+
+            } catch (err) {
+                console.log(err);
+                setLoading(true);
+            }
+        }
+
+        fetchUserData();
+
+    }, [])
+
     const renderContent = () => {
         switch (activeTab) {
             case 'aktivni':
@@ -70,22 +108,19 @@ const UserProfile = () => {
                     </div>
 
                     <div className="profile-info">
-                        <h2 className="profile-name">Kenan</h2>
-                        <p className="profile-username">@webbykenan</p>
+                        <h2 className="profile-name">{userData.name}</h2>
+                        <p className="profile-username">{userData.email}</p>
 
                         <div className="profile-stats">
+
                             <div className="stat">
-                                <span className="stat-value">12</span>
-                                <span className="stat-label">Mečeva</span>
-                            </div>
-                            <div className="stat">
-                                <span className="stat-value">4.9</span>
+                                <span className="stat-value">{userData.avgReview}</span>
                                 <span className="stat-label">Ocjena</span>
                             </div>
                         </div>
 
                         <div className="profile-bio">
-                            <p>Student i Web Developer. Spreman za nove izazove i mečeve na terenu.</p>
+                            <p>{userData.bio || "Dodajte opis za Vaš profil"}</p>
                         </div>
 
                         <button className="btn-edit-profile">Uredi Profil</button>
