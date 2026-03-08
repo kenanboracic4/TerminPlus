@@ -3,8 +3,8 @@ const userDao = require('../dao/userDao');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    async registerUser(name, email, password){
-        if( !name || !email || !password){
+    async registerUser(name, email, password) {
+        if (!name || !email || !password) {
             throw new Error('Sva polja su obavezna');
 
         }
@@ -13,35 +13,38 @@ module.exports = {
 
         return user;
     },
-    async loginUser(email, password){
-        if(!email || !password){
+    async loginUser(email, password) {
+        if (!email || !password) {
             throw new Error('Email i lozinka su obavezni');
         }
         const user = await userDao.getUserByEmail(email);
-        if(!user){
+        if (!user) {
             throw new Error('Korisnik nije pronađen!');
         }
         const passwordMatch = await bcrypt.compare(password, user.password);
-        if(!passwordMatch){
+        if (!passwordMatch) {
             throw new Error('Pogrešna lozinka!');
         }
         const token = jwt.sign({
             userId: user.id,
             name: user.name
         },
-        process.env.JWT_SECRET,
-        {expiresIn: '1h'}
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
         );
 
         const userData = {
             id: user.id,
             name: user.name,
-            email:user.email,
+            email: user.email,
             profileImage: user.profileImage,
             avgReview: user.avgReview
 
         }
-        return {token, userData};
+        return { token, userData };
+    },
+    async getProfileData(userId) {
+        return await userDao.getUserProfileData(userId);
     }
 
 }
