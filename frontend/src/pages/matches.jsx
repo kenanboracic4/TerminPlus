@@ -265,9 +265,7 @@ const Matches = () => {
                         </div>
 
                         <div className="action-group">
-                            <button type="submit" className="btn-search">
-                                <Search size={16} /> PRETRAŽI
-                            </button>
+
 
                             <button
                                 type="button"

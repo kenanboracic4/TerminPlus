@@ -10,7 +10,8 @@
 .match-manager-container {
   width: 100%;
   max-width: 900px;
-  margin: 0 auto; /* Centriranje na sredinu ekrana */
+  margin: 0 auto;
+  /* Centriranje na sredinu ekrana */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -151,15 +152,23 @@
 .form-glass-card {
   background: var(--bg-card);
   backdrop-filter: blur(10px);
-  border: 1px solid var(--accent-yellow); /* Žuti okvir za isticanje forme */
+  border: 1px solid var(--accent-yellow);
+  /* Žuti okvir za isticanje forme */
   border-radius: 16px;
   padding: 30px;
   animation: fadeIn 0.4s ease-out;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .form-header {
@@ -208,8 +217,8 @@
   gap: 6px;
 }
 
-.input-group input, 
-.input-group select, 
+.input-group input,
+.input-group select,
 .input-group textarea {
   background: rgba(0, 0, 0, 0.4);
   border: 1px solid var(--border-glass);
@@ -222,8 +231,8 @@
   font-family: 'Inter', sans-serif;
 }
 
-.input-group input:focus, 
-.input-group select:focus, 
+.input-group input:focus,
+.input-group select:focus,
 .input-group textarea:focus {
   border-color: var(--accent-yellow);
   background: rgba(0, 0, 0, 0.6);
@@ -241,19 +250,23 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
   cursor: pointer;
 }
+
 .filter-form-wrapper {
-    display: flex;
-    justify-content: space-between; /* Ovo razdvaja filtere i dugmad na krajeve */
-    align-items: center;
-    width: 100%;
-    gap: 20px; /* Razmak između elemenata */
+  display: flex;
+  justify-content: space-between;
+  /* Ovo razdvaja filtere i dugmad na krajeve */
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  /* Razmak između elemenata */
 }
 
 /* Osiguraj da top-bar-glass ne kvari flexbox */
 .top-bar-glass {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
+
 .btn-submit {
   width: 100%;
   background: var(--accent-yellow);
@@ -303,22 +316,27 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   }
 
   .match-form {
-    grid-template-columns: 1fr; /* Na mobitelu sve u jednu kolonu */
+    grid-template-columns: 1fr;
+    /* Na mobitelu sve u jednu kolonu */
   }
 
   .full-width {
     grid-column: span 1;
   }
-  .matches-container-list{
+
+  .matches-container-list {
     width: 95%;
   }
 }
+
 .location-results {
   position: absolute;
-  top: 100%; /* Odmah ispod inputa */
+  top: 100%;
+  /* Odmah ispod inputa */
   left: 0;
   right: 0;
-  background: #1c1c1c; /* Tamna tema */
+  background: #1c1c1c;
+  /* Tamna tema */
   border: 1px solid var(--accent-yellow);
   border-radius: 8px;
   list-style: none;
@@ -327,7 +345,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   z-index: 1000;
   max-height: 200px;
   overflow-y: auto;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
 }
 
 .location-results li {
@@ -338,7 +356,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   display: flex;
   align-items: center;
   gap: 10px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   transition: background 0.2s;
 }
 
@@ -350,9 +368,15 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 .location-results li:last-child {
   border-bottom: none;
 }
-.matches-container-list{
-  margin: 0 auto; 
+
+.matches-container-list {
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.no-matches-message {
+  text-align: center;
+  margin: 2rem;
 }
