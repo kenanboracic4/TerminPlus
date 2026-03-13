@@ -29,6 +29,7 @@ const Matches = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [distance, setDistance] = useState(50);
     const [selectedSport, setSelectedSport] = useState('');
+    const [joinTermin, setJoinTermin] = useState(false);
 
     const [results, setResults] = useState([]);
     const [query, setQuery] = useState("");
@@ -51,6 +52,40 @@ const Matches = () => {
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         return R * c;
     };
+
+
+
+    const handleJoinTermin = async (terminId) => {
+        if (!token) {
+            alert("Morate biti ulogovani da bi se pridružili terminu!");
+        }
+        try {
+            const response = await fetch('http://localhost:3000/matches/join/' + terminId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            if (response.ok) {
+                // Ažuriraj lokalni state da se UI odmah promijeni
+                setMatches(prevMatches =>
+                    prevMatches.map(m =>
+                        m.id === terminId
+                            ? { ...m, isUserJoined: true, currentPlayers: (m.currentPlayers || 0) + 1 }
+                            : m
+
+                    )
+                )
+            } else {
+                alert("Greška prilikom prijave na termin!");
+            }
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
 
@@ -397,7 +432,12 @@ const Matches = () => {
                         <div className="matches-container-list">
 
                             {filteredMatches.map((match) => {
-                                return <Card key={match.id} data={match} userLocations={userLocation} />;
+                                return <Card
+                                    key={match.id}
+                                    data={match}
+                                    userLocations={userLocation}
+                                    onJoin={() => handleJoinTermin(match.id)}
+                                />;
                             })}
                         </div>
                         : <p className="no-matches-message">Nema dostupnih termina. Budi prvi koji će kreirati termin!</p>
