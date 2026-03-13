@@ -16,7 +16,7 @@ const Participant = sequelize.define('Participant', {
     allowNull: false
   },
   status: {
-    type: DataTypes.ENUM('Na čekanju', 'Potvrđeno', 'Odbijeno'),
+    type: DataTypes.ENUM('Potvrđeno', 'Otkazano', 'Završeno'),
     defaultValue: 'Potvrđeno'
   }
 });

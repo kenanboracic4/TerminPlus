@@ -18,5 +18,15 @@ module.exports = {
         return createdParticipant;
     },
 
+    async cancelParticipant(matchId, userId) {
+        return await Participant.destroy({
+            where: {
+                matchId,
+                userId
+            }
+        });
+
+    },
+
 
 }

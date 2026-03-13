@@ -50,5 +50,14 @@ module.exports = {
             console.log(error);
             res.status(500).json({ message: error.message });
         }
+    },
+    async handleCancelMatch(req, res) {
+        try {
+            const { id } = req.params;
+            await participantService.cancelParticipant(id, req.user.userId);
+            res.status(200).json({ message: 'Uspješno ste otkazali termin!' });
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
