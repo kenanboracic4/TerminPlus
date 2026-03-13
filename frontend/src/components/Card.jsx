@@ -1,23 +1,20 @@
 import React, { useState } from "react";
 import {
-  MapPin,
-  Navigation,
-  Clock,
-  Calendar,
-  Users,
-  ChevronDown,
-  ChevronUp,
-  AlignLeft,
-  Trophy,
-  Wallet,
-  Info,
-  User,
-  Activity
+  MapPin, Navigation, Clock, Calendar, Users, ChevronDown, ChevronUp,
+  AlignLeft, Trophy, Wallet, Info, User, Activity
 } from "lucide-react";
 import "../assets/css/Card.css";
 
-const Card = ({ data, userLocations }) => {
+const Card = ({ data, userLocations, onJoin, onCancel }) => {
   const [showDetails, setShowDetails] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
+
+  // Provjera da li je korisnik već na terminu (ovo dolazi iz baze)
+  const isJoined = data?.isUserJoined;
+  const ukupnoMjesta = data?.neededPlayers || 1;
+  const popunjenaMjesta = data?.currentPlayers || 0;
+  const slobodnaMjesta = Math.max(0, ukupnoMjesta - popunjenaMjesta);
+  const isPopunjeno = popunjenaMjesta >= ukupnoMjesta;
 
   const izracunajUdaljenost = (lat1, lon1, lat2, lon2) => {
     const R = 6371;
@@ -29,23 +26,22 @@ const Card = ({ data, userLocations }) => {
     return R * c;
   };
 
-
-
-  const ukupnoMjesta = data?.neededPlayers || 1;
-  const popunjenaMjesta = data?.currentPlayers || 1;
-  const slobodnaMjesta = Math.max(0, ukupnoMjesta - popunjenaMjesta);
-  const isPopunjeno = slobodnaMjesta === 0;
-
-
   const terminDatum = data?.date ? new Date(data.date) : null;
   const vrijeme = terminDatum ? terminDatum.toLocaleTimeString('sr-Latn-BA', { hour: '2-digit', minute: '2-digit' }) : "00:00";
   const datumOdržavanja = terminDatum ? terminDatum.toLocaleDateString('sr-Latn-BA') : "Nepoznato";
 
+  // Funkcija koja aktivira potvrdu "U MJESTU"
+  const handleActionClick = () => {
+    setIsConfirming(true);
+    // Ako ne klikne DA/NE u roku od 5 sekundi, vrati na staro
+    setTimeout(() => setIsConfirming(false), 5000);
+  };
+
   return (
-    <div className="term-card" style={{ opacity: isPopunjeno ? 0.8 : 1 }}>
+    <div className="term-card" style={{ opacity: (isPopunjeno && !isJoined) ? 0.8 : 1 }}>
       <div className="card-main">
 
-
+        {/* KOLONA 1: Naslov i Sport */}
         <div className="card-col title-col">
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
             <span style={{ fontSize: '12px', color: 'var(--accent-yellow)', textTransform: 'uppercase', fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -88,16 +84,11 @@ const Card = ({ data, userLocations }) => {
           </div>
         </div>
 
-
+        {/* KOLONA 3: Lokacija */}
         <div className="card-col location-col">
           <div className="loc-row">
             <MapPin size={18} className="icon-green" />
-            <span className="loc-name">
-              {data?.address?.split(',')[0]}
-              {data?.address?.split(',')[1] && data?.address?.split(',')[1].trim().length <= 3
-                ? `, ${data.address.split(',')[1].trim()}`
-                : ""}
-            </span>
+            <span className="loc-name">{data?.address?.split(',')[0]}</span>
           </div>
           <div className="distance-row">
             <Navigation size={14} className="icon" />
@@ -109,27 +100,40 @@ const Card = ({ data, userLocations }) => {
           </div>
         </div>
 
-
+        {/* KOLONA 4: Akcije (Dugmad) */}
         <div className="card-col actions-col">
-          <button
-            className="btn-details"
-            onClick={() => setShowDetails(!showDetails)}
-          >
+          <button className="btn-details" onClick={() => setShowDetails(!showDetails)}>
             {showDetails ? "SAKRIJ DETALJE" : "VIŠE DETALJA"}
             {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
           </button>
-          <button
-            className="btn-join"
-            disabled={isPopunjeno}
-            style={{
-              backgroundColor: isPopunjeno ? '#333' : 'var(--accent-yellow)',
-              color: isPopunjeno ? '#888' : '#000',
-              cursor: isPopunjeno ? 'not-allowed' : 'pointer',
-              boxShadow: isPopunjeno ? 'none' : ''
-            }}
-          >
-            {isPopunjeno ? "POPUNJENO" : "PRIDRUŽI SE"}
-          </button>
+
+          {isConfirming ? (
+            /* PRIKAZ ZA POTVRDU UNUTAR KOLONE */
+            <div style={{ display: 'flex', gap: '5px', alignItems: 'center', width: '100%' }}>
+              <button
+                onClick={() => { isJoined ? onCancel(data.id) : onJoin(data.id); setIsConfirming(false); }}
+                style={{ backgroundColor: '#5eff00', color: '#000000', border: 'none', padding: '8px 12px', borderRadius: '2px', cursor: 'pointer' }}
+              >DA</button>
+              <button
+                onClick={() => setIsConfirming(false)}
+                style={{ backgroundColor: 'transparent', color: '#fd0000', border: '1px solid #fd0000', padding: '8px 12px', borderRadius: '2px', cursor: 'pointer' }}
+              >NE</button>
+            </div>
+          ) : (
+            /* GLAVNI GUMB */
+            <button
+              onClick={handleActionClick}
+              className="btn-join"
+              disabled={isPopunjeno && !isJoined}
+              style={{
+                backgroundColor: isJoined ? '#e90a0a' : (isPopunjeno ? '#333' : 'var(--accent-yellow)'),
+                color: isJoined ? '#fff' : (isPopunjeno ? '#888' : '#000'),
+                cursor: (isPopunjeno && !isJoined) ? 'not-allowed' : 'pointer'
+              }}
+            >
+              {isJoined ? "OTKAŽI" : (isPopunjeno ? "POPUNJENO" : "PRIDRUŽI SE")}
+            </button>
+          )}
         </div>
       </div>
 
@@ -137,8 +141,6 @@ const Card = ({ data, userLocations }) => {
       {showDetails && (
         <div className="details-section">
           <div className="details-grid">
-
-            {/* LJEVA STRANA: Opis */}
             <div className="details-block">
               <h4><AlignLeft size={16} className="icon-green" /> O terminu</h4>
               <p style={{ marginBottom: "20px" }}>
@@ -156,10 +158,6 @@ const Card = ({ data, userLocations }) => {
                 </div>
               </div>
             </div>
-
-            {/* DESNA STRANA: Igrači */}
-
-
           </div>
         </div>
       )}

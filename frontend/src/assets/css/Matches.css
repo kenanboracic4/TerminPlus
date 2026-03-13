@@ -108,6 +108,7 @@
 .action-group {
   display: flex;
   gap: 12px;
+  width: 20%;
 }
 
 .action-group button {
@@ -121,6 +122,7 @@
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
+  width: 100%
 }
 
 .btn-search {
@@ -308,6 +310,7 @@ input[type="datetime-local"]::-webkit-calendar-picker-indicator {
 
   .action-group {
     flex-direction: column;
+
   }
 
   .action-group button {

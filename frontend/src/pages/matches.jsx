@@ -458,6 +458,7 @@ const Matches = () => {
                                     data={match}
                                     userLocations={userLocation}
                                     onJoin={() => handleJoinTermin(match.id)}
+                                    onCancel={() => handleCancelTermin(match.id)}
                                 />;
                             })}
                         </div>
