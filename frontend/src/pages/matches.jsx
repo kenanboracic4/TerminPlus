@@ -87,7 +87,28 @@ const Matches = () => {
         }
     }
 
+    const handleCancelTermin = async (terminId) => {
+        try {
+            const response = await fetch(`http://localhost:3000/matches/cancel/${terminId}`, {
+                method: 'DELETE', // Ili POST, zavisno od tvog API-ja
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
+            if (response.ok) {
+                setMatches(prevMatches =>
+                    prevMatches.map(m =>
+                        m.id === terminId
+                            ? { ...m, isUserJoined: false, currentPlayers: Math.max(0, (m.currentPlayers || 1) - 1) }
+                            : m
+                    )
+                );
+            }
+        } catch (error) {
+            console.error("Cancel error:", error);
+        }
+    };
 
     useEffect(() => {
 
