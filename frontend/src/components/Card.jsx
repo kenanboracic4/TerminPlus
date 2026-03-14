@@ -108,7 +108,7 @@ const Card = ({ data, userLocations, onJoin, onCancel }) => {
             </button>
 
             {isConfirming ? (
-              /* PRIKAZ ZA POTVRDU UNUTAR KOLONE */
+
               <div style={{ display: 'flex', gap: '5px', alignItems: 'center', width: '100%' }}>
                 <button
                   onClick={() => { isJoined ? onCancel(data.id) : onJoin(data.id); setIsConfirming(false); }}
@@ -120,7 +120,7 @@ const Card = ({ data, userLocations, onJoin, onCancel }) => {
                 >NE</button>
               </div>
             ) : (
-              /* GLAVNI GUMB */
+
               <button
                 onClick={handleActionClick}
                 className="btn-join"
@@ -138,7 +138,7 @@ const Card = ({ data, userLocations, onJoin, onCancel }) => {
         )}
       </div>
 
-      {/* SEKCIJA DETALJA */}
+
       {showDetails && (
         <div className="details-section">
           <div className="details-grid">

@@ -2,9 +2,11 @@ import React, { useContext, useEffect, useState } from 'react';
 import '../assets/css/UserProfile.css';
 import Navbar from '../components/NavBar';
 import { AuthContext } from '../context/AuthContext';
+import { AlignLeft, User, Info } from 'lucide-react';
 
 const UserProfile = () => {
     const { token } = useContext(AuthContext);
+    const [showDetails, setShowDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('aktivni');
     const [userMatches, setUserMatches] = useState([]);
@@ -70,31 +72,66 @@ const UserProfile = () => {
             case 'aktivni':
                 return (
                     <div className="tab-content glass-card fade-in">
-                        {userMatches && userMatches.length > 0
-                            ? userMatches.map(match => {
-                                return <div className="match-item">
-                                    <div className="match-info">
-                                        <h4>{match.title}</h4>
-                                        <p>
-                                            Datum: {new Date(match.date).toLocaleDateString('sr-Latn-BA')} |
-                                            Vrijeme: {new Date(match.date).toLocaleTimeString('sr-Latn-BA', { hour: '2-digit', minute: '2-digit' })}
-                                        </p>
+                        {userMatches && userMatches.length > 0 ? (
+                            userMatches.map((match) => (
+                                <div key={match.id} className="match-item">
+                                    {/* Gornji dio: Naslov i Dugme */}
+                                    <div className="match-top-row">
+                                        <div className="match-info">
+                                            <h4>{match.title}</h4>
+                                            <p>
+                                                {new Date(match.date).toLocaleDateString('sr-Latn-BA')} |
+                                                {new Date(match.date).toLocaleTimeString('sr-Latn-BA', { hour: '2-digit', minute: '2-digit' })}
+                                            </p>
+                                        </div>
+                                        <button
+                                            className="btn-action"
+                                            onClick={() => setShowDetails(showDetails === match.id ? null : match.id)}
+                                        >
+                                            {showDetails === match.id ? 'Zatvori' : 'Detalji'}
+                                        </button>
                                     </div>
-                                    <button className="btn-action">Detalji</button>
+
+                                    {/* Donji dio: Detalji koji se pojavljuju na klik */}
+                                    {showDetails === match.id && (
+                                        <div className="details-section fade-in">
+                                            <hr className="details-divider" />
+                                            <div className="details-grid">
+                                                <div className="details-block">
+                                                    <h5 className="details-title">
+                                                        <AlignLeft size={16} className="icon-green" /> O terminu
+                                                    </h5>
+                                                    <p className="description-text">
+                                                        {match?.description || "Organizator nije dodao specifičan opis za ovaj termin."}
+                                                    </p>
+
+                                                    <div className="meta-container">
+                                                        <div className="info-item">
+                                                            <User size={14} className="icon" />
+                                                            <span>Organizator: <strong>{match?.creatorName}</strong></span>
+                                                        </div>
+                                                        <div className="info-item">
+                                                            <Info size={14} className="icon" />
+                                                            <span>Kreirano: {match?.createdAt ? new Date(match?.createdAt).toLocaleDateString('sr-Latn-BA') : "Nepoznato"}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                            })
-                            : <p style={{ color: 'yellow', textAlign: 'center' }}>Nema terminova</p>
-                        }
-
-
-                    </div >
+                            ))
+                        ) : (
+                            <p className="no-data-msg">Nema termina za prikaz</p>
+                        )}
+                    </div>
                 );
             case 'zavrseni':
                 return (
                     <div className="tab-content glass-card fade-in">
                         {userFinishedMatches && userFinishedMatches.length > 0
                             ? userFinishedMatches.map(match => {
-                                return <div className="match-item opacity-dim">
+                                return <div key={match.id} className="match-item opacity-dim">
                                     <div className="match-info">
                                         <h4>{match.title}</h4>
                                         <p>

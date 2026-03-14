@@ -136,18 +136,15 @@
     box-shadow: 0 0 15px rgba(204, 255, 0, 0.4);
 }
 
-/* =========================================
-   DESNI DIO (Sadržaj) - 70%
-   ========================================= */
+
 .profile-main {
     flex: 1;
-    /* Zauzima preostali prostor (cca 70%) */
     display: flex;
     flex-direction: column;
     gap: 20px;
 }
 
-/* Tabovi */
+
 .tabs-container {
     display: flex;
     gap: 10px;
@@ -178,7 +175,7 @@
     box-shadow: 0 4px 15px rgba(204, 255, 0, 0.2);
 }
 
-/* Sadržaj tabova */
+
 .tab-content {
     padding: 24px;
     display: flex;
@@ -202,27 +199,33 @@
     }
 }
 
-/* Dizajn pojedinačnog meča/termina */
 .match-item {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    background: rgba(0, 0, 0, 0.4);
+    flex-direction: column;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border-glass);
     border-radius: 12px;
-    transition: 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .match-item:hover {
     border-color: var(--accent-neon);
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+
+.match-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .match-info h4 {
-    margin: 0 0 6px 0;
-    font-size: 16px;
-    color: var(--text-main);
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    color: var(--accent-neon);
 }
 
 .match-info p {
@@ -231,21 +234,85 @@
     color: var(--text-muted);
 }
 
+
+.details-section {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.details-divider {
+    border: 0;
+    border-top: 1px solid var(--border-glass);
+    margin-bottom: 15px;
+}
+
+.details-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 10px 0;
+    color: var(--text-main);
+    font-size: 15px;
+}
+
+.description-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+
+.meta-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.info-item strong {
+    color: var(--text-main);
+}
+
+.icon-green {
+    color: var(--accent-neon);
+}
+
+
 .btn-action {
     background: var(--accent-neon);
     color: #000;
     border: none;
-    padding: 8px 16px;
-    border-radius: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
     font-weight: 700;
-    font-size: 13px;
     cursor: pointer;
-    transition: 0.3s ease;
+    transition: 0.3s;
+    white-space: nowrap;
+
 }
 
 .btn-action:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(204, 255, 0, 0.3);
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(204, 255, 0, 0.4);
+}
+
+
+.no-data-msg {
+    color: #ffcc00;
+    text-align: center;
+    font-weight: 600;
+    padding: 20px;
 }
 
 .opacity-dim {
@@ -281,9 +348,7 @@
     color: var(--accent-neon);
 }
 
-/* =========================================
-   RESPONSIVE (Mobilni)
-   ========================================= */
+
 @media (max-width: 768px) {
     .profile-page-container {
         flex-direction: column;
@@ -305,5 +370,74 @@
 
     .btn-action {
         width: 100%;
+    }
+}
+
+
+.match-item {
+    display: flex;
+    flex-direction: column;
+
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    margin-bottom: 15px;
+    padding: 15px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.match-main-info {
+    display: flex;
+    justify-content: space-between;
+
+    align-items: center;
+}
+
+
+.details-dropdown {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.details-divider {
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 10px 0;
+}
+
+.details-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 10px;
+    margin-top: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    color: #ccc;
+}
+
+
+.fade-in {
+    animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }
