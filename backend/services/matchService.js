@@ -17,5 +17,8 @@ module.exports = {
     async getAllSports() {
         console.log("servis");
         return await matchDao.getAllSports();
-    }
+    },
+    async getUserMatches(userId) {
+        return await matchDao.getUserMatches(userId);
+    },
 }

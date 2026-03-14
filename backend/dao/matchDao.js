@@ -3,6 +3,7 @@ const Sport = require('../models/Sports_LK');
 const Participant = require('../models/Participant');
 const sequelize = require('../config/db');
 const { literal } = require('sequelize');
+const { Op } = require('sequelize');
 
 module.exports = {
     async createMatch(title, sportId, date, neededPlayers, pricePerPerson, latitude, longitude, address, description, creatorId, creatorName) {
@@ -21,6 +22,16 @@ module.exports = {
         })
     },
     async getAllMatches(userId = null) {
+
+        await Match.update(
+            { status: 'Završeno' },
+            {
+                where: {
+                    date: { [Op.lt]: new Date() },
+                    status: 'Aktivno'
+                }
+            }
+        );
         const matches = await Match.findAll({
             include: [
                 { model: Sport, as: 'sport' },
@@ -53,5 +64,12 @@ module.exports = {
     async getAllSports() {
         console.log("dao");
         return await Sport.findAll();
+    },
+    async getUserMatches(userId) {
+        return await Match.findAll({
+            include: [
+                { model: Participant, as: 'participations', where: { userId } }
+            ]
+        });
     }
 }

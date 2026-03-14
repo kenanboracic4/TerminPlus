@@ -15,5 +15,7 @@ router.get('/sports', matchController.getAllSports);
 router.post('/join/:id', verifyToken, matchController.handleJoinMatch);
 router.delete('/cancel/:id', verifyToken, matchController.handleCancelMatch);
 
+router.get('/user', verifyToken, matchController.getUserMatches);
+
 
 module.exports = router;

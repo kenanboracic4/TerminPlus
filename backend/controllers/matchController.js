@@ -59,5 +59,15 @@ module.exports = {
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+    async getUserMatches(req, res) {
+        try {
+            const matches = await matchService.getUserMatches(req.user.userId);
+
+            res.status(200).json(matches);
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error.message });
+        }
+    },
 }
