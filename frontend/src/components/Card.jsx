@@ -126,7 +126,7 @@ const Card = ({ data, userLocations, onJoin, onCancel }) => {
               className="btn-join"
               disabled={isPopunjeno && !isJoined}
               style={{
-                backgroundColor: isJoined ? '#e90a0a' : (isPopunjeno ? '#333' : 'var(--accent-yellow)'),
+                backgroundColor: isJoined ? '#c50303' : (isPopunjeno ? '#333' : 'var(--accent-yellow)'),
                 color: isJoined ? '#fff' : (isPopunjeno ? '#888' : '#000'),
                 cursor: (isPopunjeno && !isJoined) ? 'not-allowed' : 'pointer'
               }}

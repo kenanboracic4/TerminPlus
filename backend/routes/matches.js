@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
 });
 
 
-router.get('/all', matchController.getAllMatches);
+router.get('/all', verifyToken, matchController.getAllMatches);
 router.post('/new', verifyToken, matchController.handleAddMatch);
 router.get('/sports', matchController.getAllSports);
 router.post('/join/:id', verifyToken, matchController.handleJoinMatch);

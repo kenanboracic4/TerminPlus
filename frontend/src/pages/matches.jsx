@@ -166,7 +166,13 @@ const Matches = () => {
         }
         const fetchMatches = async () => {
             try {
-                const response = await fetch('http://localhost:3000/matches/all');
+                const response = await fetch('http://localhost:3000/matches/all', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
                 const data = await response.json();
                 setMatches(data);
 

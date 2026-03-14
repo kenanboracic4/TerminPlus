@@ -20,7 +20,7 @@ module.exports = {
 
     async getAllMatches(req, res) {
         try {
-            const matches = await matchService.getAllMatches();
+            const matches = await matchService.getAllMatches(req.user.userId);
 
             res.status(200).json(matches);
         } catch (error) {

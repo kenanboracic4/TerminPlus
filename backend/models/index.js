@@ -15,16 +15,22 @@ Match.belongsTo(Sport, { foreignKey: 'sportId', as: 'sport' });
 User.hasMany(Match, { foreignKey: 'creatorId', as: 'CreatedMatches' });
 Match.belongsTo(User, { foreignKey: 'creatorId', as: 'Creator' });
 
+// DODAJ OVO: Direktna veza sa modelom Participant (za include i brojanje)
+Match.hasMany(Participant, { foreignKey: 'matchId', as: 'participations' });
+Participant.belongsTo(Match, { foreignKey: 'matchId' });
+
+User.hasMany(Participant, { foreignKey: 'userId', as: 'participations' });
+Participant.belongsTo(User, { foreignKey: 'userId' });
 // 4. Many-to-Many: Korisnici prijavljeni na Termin (Učesnici)
-User.belongsToMany(Match, { 
-  through: Participant, 
-  foreignKey: 'userId', 
-  as: 'ParticipatingMatches' 
+User.belongsToMany(Match, {
+  through: Participant,
+  foreignKey: 'userId',
+  as: 'ParticipatingMatches'
 });
-Match.belongsToMany(User, { 
-  through: Participant, 
-  foreignKey: 'matchId', 
-  as: 'Players' 
+Match.belongsToMany(User, {
+  through: Participant,
+  foreignKey: 'matchId',
+  as: 'Players'
 });
 
 // 5. Relacije za Ocjenjivanje (Review)
