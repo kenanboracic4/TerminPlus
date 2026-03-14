@@ -30,10 +30,10 @@ const Card = ({ data, userLocations, onJoin, onCancel }) => {
   const vrijeme = terminDatum ? terminDatum.toLocaleTimeString('sr-Latn-BA', { hour: '2-digit', minute: '2-digit' }) : "00:00";
   const datumOdržavanja = terminDatum ? terminDatum.toLocaleDateString('sr-Latn-BA') : "Nepoznato";
 
-  // Funkcija koja aktivira potvrdu "U MJESTU"
+
   const handleActionClick = () => {
     setIsConfirming(true);
-    // Ako ne klikne DA/NE u roku od 5 sekundi, vrati na staro
+
     setTimeout(() => setIsConfirming(false), 5000);
   };
 
@@ -100,41 +100,42 @@ const Card = ({ data, userLocations, onJoin, onCancel }) => {
           </div>
         </div>
 
-        {/* KOLONA 4: Akcije (Dugmad) */}
-        <div className="card-col actions-col">
-          <button className="btn-details" onClick={() => setShowDetails(!showDetails)}>
-            {showDetails ? "SAKRIJ DETALJE" : "VIŠE DETALJA"}
-            {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
-          </button>
-
-          {isConfirming ? (
-            /* PRIKAZ ZA POTVRDU UNUTAR KOLONE */
-            <div style={{ display: 'flex', gap: '5px', alignItems: 'center', width: '100%' }}>
-              <button
-                onClick={() => { isJoined ? onCancel(data.id) : onJoin(data.id); setIsConfirming(false); }}
-                style={{ backgroundColor: '#5eff00', color: '#000000', border: 'none', padding: '8px 12px', borderRadius: '2px', cursor: 'pointer' }}
-              >DA</button>
-              <button
-                onClick={() => setIsConfirming(false)}
-                style={{ backgroundColor: 'transparent', color: '#fd0000', border: '1px solid #fd0000', padding: '8px 12px', borderRadius: '2px', cursor: 'pointer' }}
-              >NE</button>
-            </div>
-          ) : (
-            /* GLAVNI GUMB */
-            <button
-              onClick={handleActionClick}
-              className="btn-join"
-              disabled={isPopunjeno && !isJoined}
-              style={{
-                backgroundColor: isJoined ? '#c50303' : (isPopunjeno ? '#333' : 'var(--accent-yellow)'),
-                color: isJoined ? '#fff' : (isPopunjeno ? '#888' : '#000'),
-                cursor: (isPopunjeno && !isJoined) ? 'not-allowed' : 'pointer'
-              }}
-            >
-              {isJoined ? "OTKAŽI" : (isPopunjeno ? "POPUNJENO" : "PRIDRUŽI SE")}
+        {data.status == 'Aktivno' && (
+          <div className="card-col actions-col">
+            <button className="btn-details" onClick={() => setShowDetails(!showDetails)}>
+              {showDetails ? "SAKRIJ DETALJE" : "VIŠE DETALJA"}
+              {showDetails ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
             </button>
-          )}
-        </div>
+
+            {isConfirming ? (
+              /* PRIKAZ ZA POTVRDU UNUTAR KOLONE */
+              <div style={{ display: 'flex', gap: '5px', alignItems: 'center', width: '100%' }}>
+                <button
+                  onClick={() => { isJoined ? onCancel(data.id) : onJoin(data.id); setIsConfirming(false); }}
+                  style={{ backgroundColor: '#5eff00', color: '#000000', border: 'none', padding: '8px 12px', borderRadius: '2px', cursor: 'pointer' }}
+                >DA</button>
+                <button
+                  onClick={() => setIsConfirming(false)}
+                  style={{ backgroundColor: 'transparent', color: '#fd0000', border: '1px solid #fd0000', padding: '8px 12px', borderRadius: '2px', cursor: 'pointer' }}
+                >NE</button>
+              </div>
+            ) : (
+              /* GLAVNI GUMB */
+              <button
+                onClick={handleActionClick}
+                className="btn-join"
+                disabled={isPopunjeno && !isJoined}
+                style={{
+                  backgroundColor: isJoined ? '#c50303' : (isPopunjeno ? '#333' : 'var(--accent-yellow)'),
+                  color: isJoined ? '#fff' : (isPopunjeno ? '#888' : '#000'),
+                  cursor: (isPopunjeno && !isJoined) ? 'not-allowed' : 'pointer'
+                }}
+              >
+                {isJoined ? "OTKAŽI" : (isPopunjeno ? "POPUNJENO" : "PRIDRUŽI SE")}
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* SEKCIJA DETALJA */}

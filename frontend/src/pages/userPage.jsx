@@ -7,6 +7,8 @@ const UserProfile = () => {
     const { token } = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
     const [activeTab, setActiveTab] = useState('aktivni');
+    const [userMatches, setUserMatches] = useState([]);
+    const [userFinishedMatches, setUserFinishedMatches] = useState([]);
     const [userData, setUserData] = useState({
         name: '',
         email: '',
@@ -38,10 +40,29 @@ const UserProfile = () => {
                 console.log(err);
                 setLoading(true);
             }
+        };
+
+        const fetchUserMatches = async () => {
+            try {
+                const response = await fetch('http://localhost:3000/matches/user', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                console.table(data);
+                setUserMatches(data.filter(match => match.status === 'Aktivno'));
+                setUserFinishedMatches(data.filter(match => match.status === 'Završeno'));
+                setLoading(false);
+            } catch (error) {
+                console.error(error);
+                setLoading(true);
+            }
         }
 
         fetchUserData();
-
+        fetchUserMatches();
     }, [])
 
     const renderContent = () => {
@@ -49,32 +70,43 @@ const UserProfile = () => {
             case 'aktivni':
                 return (
                     <div className="tab-content glass-card fade-in">
-                        <div className="match-item">
-                            <div className="match-info">
-                                <h4>Trening / Meč - Arena</h4>
-                                <p>Datum: 12. Mart 2026. | Vrijeme: 18:00</p>
-                            </div>
-                            <button className="btn-action">Detalji</button>
-                        </div>
-                        <div className="match-item">
-                            <div className="match-info">
-                                <h4>Mali Fudbal - Zetra</h4>
-                                <p>Datum: 15. Mart 2026. | Vrijeme: 20:00</p>
-                            </div>
-                            <button className="btn-action">Detalji</button>
-                        </div>
-                    </div>
+                        {userMatches && userMatches.length > 0
+                            ? userMatches.map(match => {
+                                return <div className="match-item">
+                                    <div className="match-info">
+                                        <h4>{match.title}</h4>
+                                        <p>
+                                            Datum: {new Date(match.date).toLocaleDateString('sr-Latn-BA')} |
+                                            Vrijeme: {new Date(match.date).toLocaleTimeString('sr-Latn-BA', { hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+                                    </div>
+                                    <button className="btn-action">Detalji</button>
+                                </div>
+                            })
+                            : <p style={{ color: 'yellow', textAlign: 'center' }}>Nema terminova</p>
+                        }
+
+
+                    </div >
                 );
             case 'zavrseni':
                 return (
                     <div className="tab-content glass-card fade-in">
-                        <div className="match-item opacity-dim">
-                            <div className="match-info">
-                                <h4>Trening - Skenderija</h4>
-                                <p>Završeno: 5. Mart 2026.</p>
-                            </div>
-                            <span className="status-badge">Završeno</span>
-                        </div>
+                        {userFinishedMatches && userFinishedMatches.length > 0
+                            ? userFinishedMatches.map(match => {
+                                return <div className="match-item opacity-dim">
+                                    <div className="match-info">
+                                        <h4>{match.title}</h4>
+                                        <p>
+                                            Datum: {new Date(match.date).toLocaleDateString('sr-Latn-BA')} |
+                                            Vrijeme: {new Date(match.date).toLocaleTimeString('sr-Latn-BA', { hour: '2-digit', minute: '2-digit' })}
+                                        </p>
+                                    </div>
+
+                                </div>
+                            })
+                            : <p>Nema završenih termina</p>
+                        }
                     </div>
                 );
             case 'recenzije':
@@ -98,11 +130,11 @@ const UserProfile = () => {
         <>
             <Navbar />
             <div className="profile-page-container">
-                {/* LIJEVI DIO: 30% - Osnovni podaci */}
+
                 <aside className="profile-sidebar glass-card">
                     <div className="profile-image-container">
                         <div className="profile-avatar">
-                            {/* Placeholder za sliku, možeš ubaciti <img> */}
+
                             <span>K</span>
                         </div>
                     </div>
@@ -127,9 +159,9 @@ const UserProfile = () => {
                     </div>
                 </aside>
 
-                {/* DESNI DIO: 70% - Tabovi i Termini */}
+
                 <main className="profile-main">
-                    {/* Tab Navigacija */}
+
                     <div className="tabs-container glass-card">
                         <button
                             className={`tab-btn ${activeTab === 'aktivni' ? 'active' : ''}`}
